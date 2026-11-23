@@ -76,9 +76,31 @@ Each `expected.json` contains these fields.
 Each case exposes audio bytes and ordered events through `.observable`, and
 answerer, pair membership, verdict, and actions through `.expected`. Case
 metadata lives on the enclosing case. Replay passes `.observable` to the
-case runner. The provisional runner writes `result.json` and `trace.json`
-directly under `--out` for a single case, or under one subdirectory per case ID
-for a pack with multiple cases.
+case runner.
+
+## Replay and cutoff
+
+Virtual time starts at `call_answered`. Replay delivers observations to a fresh
+detector in `(arrival_ms, sequence)` order. Each observation carries its event
+and answer-relative time. Media observations carry the sample start time and
+one frame of audio. Replay keeps the pack metadata, evaluator assertions, and
+full audio file outside the detector interface.
+
+The detector receives the `cutoff` observation at 2,000 ms, after the eligible
+inputs at that time. A frame can affect the initial decision if it arrived by
+2,000 ms and all its samples fit in `[0, 2000)` ms. This includes a frame
+ending at 2,000 ms that arrives at that instant. A frame whose samples extend
+beyond the decision window is discarded if its recorded arrival is at or
+before the cutoff. File exhaustion and `stop` leave the cutoff timer running.
+Only `call_completed` signals confirmed call completion.
+
+The first detector commitment through the cutoff becomes the initial decision,
+with `uncertain` as the default if the detector has not committed. Replay
+continues to deliver arrivals after the cutoff. `result.json` records the
+initial decision at 2,000 ms, and `trace.json` lists observations in delivery
+order, including any later verdicts. Both files go directly under `--out`
+for a single case, or under one subdirectory per case ID for a pack with
+multiple cases.
 
 ## Canonical bytes
 
