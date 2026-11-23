@@ -77,6 +77,7 @@ class FixtureCase:
     expected: EvaluatorAssertions
     policy_events: tuple[PolicyEvent, ...] = ()
     split: str | None = None
+    family: str | None = None
 
 
 def frame_ends_by_cutoff(frame_index: int) -> bool:
@@ -273,11 +274,15 @@ def _read_case(root: Path, entry: dict, pack_version: int) -> FixtureCase:
     ):
         if not _nonblank(entry.get(field)):
             raise FixtureValidationError(code, case_id)
-    split = None
+    split = family = None
     if pack_version == 2:
         split = entry.get("split")
         if split not in ("dev", "eval"):
             raise FixtureValidationError("INVALID_SPLIT", case_id)
+        if "family" in entry:
+            family = entry["family"]
+            if not _nonblank(family):
+                raise FixtureValidationError("INVALID_FAMILY", case_id)
     payloads = entry.get("payloads")
     if not isinstance(payloads, dict) or payloads.keys() != set(PAYLOAD_NAMES):
         raise FixtureValidationError("INVALID_PAYLOADS", case_id)
@@ -292,7 +297,7 @@ def _read_case(root: Path, entry: dict, pack_version: int) -> FixtureCase:
     expected = _read_expected(expected_data, f"{case_id}/expected.json")
     return FixtureCase(
         case_id, entry["track"], entry["source_group"], entry["provenance"], entry["license"],
-        ObservableInput(audio, events), expected, _read_policy_events(entry), split,
+        ObservableInput(audio, events), expected, _read_policy_events(entry), split, family,
     )
 
 

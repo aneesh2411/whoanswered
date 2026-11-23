@@ -21,6 +21,7 @@ order.
 | `provenance` | Nonempty description of where the case data came from or how it was generated. |
 | `license` | Nonempty license identifier or reference, such as `MIT`. |
 | `split` | Required in pack revision `2`. Use `dev` for development or `eval` for reserved evaluation. Revision `1` cases load with no split. |
+| `family` | Optional nonempty fixture family name in pack revision `2`. The comparison groups cases without a family under `unspecified`. |
 | `payloads` | Object with entries named `audio.ulaw`, `events.jsonl`, and `expected.json`. Each entry contains `path` and `sha256`. |
 | `policy_events` | Optional list for the `policy` track. Each record has a nonnegative, answer-relative integer `at_ms` and an `event` of `screener`, `prompt_end`, `human_takeover`, `mailbox_ready`, or `disconnect`. |
 
@@ -180,6 +181,8 @@ Print the median commitment time in milliseconds from answer, using the
 observation time of the verdict that froze each commitment, including wrong
 ones. Average the middle two times for an even count. Report `null` for
 rates with zero denominators and for the median when there are no commitments.
+Report abstentions by true class and fixture family, with the number of
+eligible cases in each group as its denominator.
 
 Promote the candidate only if coverage is at least `v1` coverage, neither
 human-as-mailbox nor mailbox-as-human errors increase, and correct

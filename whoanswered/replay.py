@@ -2,7 +2,7 @@
 
 import hashlib
 from collections.abc import Callable, Iterable, Iterator
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from .baseline import AudioBaseline, DetectorUpdate
@@ -41,7 +41,8 @@ class CaseReplay:
     case: FixtureCase
     initial_verdict: str
     observations: list[dict]
-    actions: list[PlaybackAction]
+    actions: list[PlaybackAction] = field(default_factory=list)
+    commitment_ms: int | None = None
 
     def initial_decision(self) -> dict:
         return {"at_ms": CUTOFF_MS, "decision": self.initial_verdict, "provisional": True}
@@ -59,11 +60,10 @@ def replay(
     factory = AudioBaseline if detector_factory is None else detector_factory
     results = []
     for case in cases:
-        initial_verdict, observations = _run_detector(case.observable, factory())
-        sink = InMemoryPlaybackSink()
+        result = replay_case(case, factory())
         if case.track == "policy":
-            policy_runner(case.policy_events, sink)
-        results.append(CaseReplay(case, initial_verdict, observations, sink.trace))
+            result.actions = replay_policy(case, policy_runner)
+        results.append(result)
 
     out.mkdir(parents=True, exist_ok=True)
     (out / "scorecard.json").write_bytes(canonical_json(build_scorecard(results)))
@@ -83,6 +83,12 @@ def replay(
         case_out.mkdir(parents=True, exist_ok=True)
         (case_out / "result.json").write_bytes(canonical_json(result.initial_decision()))
         (case_out / "trace.json").write_bytes(canonical_json(result.observations))
+
+
+def replay_policy(case: FixtureCase, policy_runner: PolicyRunner) -> list[PlaybackAction]:
+    sink = InMemoryPlaybackSink()
+    policy_runner(case.policy_events, sink)
+    return sink.trace
 
 
 def _observations(observable: ObservableInput) -> Iterator[Observation]:
@@ -110,21 +116,21 @@ def _observations(observable: ObservableInput) -> Iterator[Observation]:
         yield Observation("cutoff", CUTOFF_MS)
 
 
-def _run_detector(observable: ObservableInput, detector: Detector) -> tuple[str, list[dict]]:
-    first_verdict = None
+def replay_case(case: FixtureCase, detector: Detector, *, cutoff_only: bool = False) -> CaseReplay:
+    """Run the detector on observable inputs and record when its initial verdict was made."""
+    commitment_ms = None
     initial_verdict = None
     trace = []
-    for observation in _observations(observable):
+    for observation in _observations(case.observable):
         update = detector(observation)
         if isinstance(update, DetectorUpdate):
             verdict, reason = update.verdict, update.reason
         else:
             verdict, reason = update, None
-        if initial_verdict is None:
-            if first_verdict is None:
-                first_verdict = verdict
-            if observation.event == "cutoff":
-                initial_verdict = "uncertain" if first_verdict is None else first_verdict
+        if initial_verdict is None and verdict is not None:
+            initial_verdict = verdict
+            if verdict != "uncertain":
+                commitment_ms = observation.at_ms
 
         entry = {"at_ms": observation.at_ms, "event": observation.event}
         if observation.sequence is not None:
@@ -137,6 +143,11 @@ def _run_detector(observable: ObservableInput, detector: Detector) -> tuple[str,
         if verdict is not None:
             entry["verdict"] = verdict
         trace.append(entry)
+        if observation.event == "cutoff":
+            if initial_verdict is None:
+                initial_verdict = "uncertain"
+            if cutoff_only:
+                break
 
     assert initial_verdict is not None
-    return initial_verdict, trace
+    return CaseReplay(case, initial_verdict, trace, commitment_ms=commitment_ms)
