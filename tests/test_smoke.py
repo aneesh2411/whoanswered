@@ -12,7 +12,7 @@ EXPECTED = ROOT / "tests" / "expected" / "smoke"
 class SmokeTest(unittest.TestCase):
     def test_replay_matches_expectations(self) -> None:
         pack = Path("fixtures/smoke")
-        self.assertEqual((ROOT / pack / "greeting.txt").read_bytes(), b"Hello?\n")
+        self.assertEqual((ROOT / pack / "audio.ulaw").read_bytes(), b"\xff" * 320)
 
         with tempfile.TemporaryDirectory() as temp:
             out = Path(temp) / "smoke"
