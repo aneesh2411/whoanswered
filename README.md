@@ -82,6 +82,9 @@ python -m whoanswered replay --pack fixtures/v1 --out build/replay
 python -m unittest tests.test_challenge_pack tests.test_scorecard
 ```
 
+Replay uses the frozen `v1` detector by default. Use `--detector v1` to select
+it explicitly.
+
 The replay writes `build/replay/scorecard.json` and
 `build/replay/traces.jsonl`. The scorecard reports committed coverage across
 acoustic fixtures and errors among those commitments. It measures wrong

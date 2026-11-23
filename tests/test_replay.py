@@ -5,7 +5,7 @@ import unittest
 from dataclasses import asdict
 from pathlib import Path
 
-from whoanswered.fixtures import FRAME_BYTES, canonical_json, canonical_jsonl
+from whoanswered.fixtures import EVENT_TYPES, FRAME_BYTES, canonical_json, canonical_jsonl, load_pack
 from whoanswered.replay import Observation, replay
 
 
@@ -81,6 +81,25 @@ class ReplayTest(unittest.TestCase):
         detector = RecordingDetector(self, choose)
         replay(pack, out, detector_factory=lambda: detector)
         return detector, (out / "result.json").read_bytes(), json.loads((out / "trace.json").read_bytes())
+
+    def test_factory_creates_fresh_detectors_that_receive_only_observations(self):
+        pack = SMOKE.parent / "v1"
+        detectors = []
+
+        def factory():
+            detector = RecordingDetector(self, lambda observation: None)
+            detectors.append(detector)
+            return detector
+
+        replay(pack, self.temp / "out", detector_factory=factory)
+
+        for case, detector in zip(load_pack(pack), detectors, strict=True):
+            with self.subTest(case_id=case.case_id):
+                events = [observation.event for observation in detector.seen]
+                self.assertEqual(events[:1], ["call_answered"])
+                self.assertEqual(events.count("call_answered"), 1)
+                self.assertEqual(events.count("cutoff"), 1)
+                self.assertLessEqual(set(events), EVENT_TYPES | {"cutoff"})
 
     def test_cutoff_delivers_complete_batch_in_arrival_and_sequence_order(self):
         audio = b"".join(bytes([index]) * FRAME_BYTES for index in range(102))
