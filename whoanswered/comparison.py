@@ -2,16 +2,49 @@
 
 from collections import Counter
 from collections.abc import Callable, Iterable, Mapping
+from hashlib import sha256
 from pathlib import Path
 from statistics import median
 
-from .fixtures import CUTOFF_MS, FixtureCase, FixtureValidationError, canonical_json, load_pack
+from . import baseline, veto
+from .fixtures import (
+    CUTOFF_MS, FRAME_MS, FixtureCase, FixtureValidationError, canonical_json, load_pack,
+)
 from .policy import run_policy
 from .replay import CaseReplay, Detector, PolicyRunner, replay_case, replay_policy
 from .scorecard import matched_prefix_assertions, metric_rate, policy_assertions
 
 
 ANSWERERS = ("human", "voicemail")
+DETECTOR_FACTORIES = {
+    "v1": baseline.AudioBaseline,
+    "veto": veto.CutoffVeto,
+    "score": veto.EvidenceScore,
+}
+
+
+def _bundled_detector_configs() -> dict:
+    baseline_source = Path(baseline.__file__).read_text(encoding="utf-8")
+    veto_source = Path(veto.__file__).read_text(encoding="utf-8")
+    baseline_version = {"baseline.py": sha256(baseline_source.encode("utf-8")).hexdigest()}
+    cutoff_version = baseline_version | {"veto.py": sha256(veto_source.encode("utf-8")).hexdigest()}
+    greeting_thresholds = {
+        "active_mean_square": baseline.ACTIVE_MEAN_SQUARE,
+        "greeting_min_ms": baseline.HUMAN_MIN_MS,
+        "greeting_max_ms": baseline.HUMAN_MAX_MS,
+        "opening_pause_min_ms": baseline.HUMAN_PAUSE_MS,
+    }
+    return {
+        "v1": {
+            "version": baseline_version,
+            "thresholds": greeting_thresholds | {"mailbox_min_ms": baseline.VOICEMAIL_MIN_MS},
+        },
+        "veto": {"version": cutoff_version, "thresholds": greeting_thresholds},
+        "score": {
+            "version": cutoff_version,
+            "thresholds": greeting_thresholds | {"score_threshold_frames": veto.SCORE_THRESHOLD_FRAMES},
+        },
+    }
 
 
 def eligible_acoustic_cases(cases: Iterable[FixtureCase]) -> list[FixtureCase]:
@@ -69,7 +102,8 @@ def compare(
     pack: Path,
     out: Path,
     *,
-    detector_factories: Mapping[str, Callable[[], Detector]],
+    detector_factories: Mapping[str, Callable[[], Detector]] | None = None,
+    policy_pack: Path | None = None,
     policy_runner: PolicyRunner = run_policy,
 ) -> None:
     """Write one canonical JSON comparison report for the reserved split."""
@@ -78,13 +112,18 @@ def compare(
         raise FixtureValidationError("MISSING_EVAL_SPLIT", "manifest.json")
     eligible = eligible_acoustic_cases(cases)
     matched = [case for case in cases if case.expected.matched_pair is not None]
+    policy_source = cases if policy_pack is None else load_pack(policy_pack)
+    policy_cases = [case for case in policy_source if case.track == "policy"]
+    if policy_pack is not None and not policy_cases:
+        raise FixtureValidationError("MISSING_POLICY_CASES", "manifest.json")
     policy = policy_assertions(
-        (case, replay_policy(case, policy_runner)) for case in cases if case.track == "policy"
+        (case, replay_policy(case, policy_runner)) for case in policy_cases
     )
 
     acoustic = {}
     prefixes = {}
-    for name, factory in detector_factories.items():
+    factories = DETECTOR_FACTORIES if detector_factories is None else detector_factories
+    for name, factory in factories.items():
         acoustic[name] = acoustic_metrics([
             replay_case(case, factory(), cutoff_only=True) for case in eligible
         ])
@@ -104,11 +143,18 @@ def compare(
     report = {
         "split": "eval",
         "cutoff_ms": CUTOFF_MS,
+        "frame_ms": FRAME_MS,
+        "pack_manifest_sha256": sha256((pack / "manifest.json").read_bytes()).hexdigest(),
         "eligible_case_ids": [case.case_id for case in eligible],
         "acoustic": acoustic,
         "matched_prefix_assertions": prefixes,
         "policy_assertions": policy,
         "promotion": promotion,
     }
+    if detector_factories is None:
+        report["detectors"] = _bundled_detector_configs()
+    if policy_pack is not None:
+        policy_manifest = (policy_pack / "manifest.json").read_bytes()
+        report["policy_pack_manifest_sha256"] = sha256(policy_manifest).hexdigest()
     out.mkdir(parents=True, exist_ok=True)
     (out / "comparison.json").write_bytes(canonical_json(report))
