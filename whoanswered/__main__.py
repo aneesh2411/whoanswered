@@ -8,9 +8,10 @@ from .bundle import bundle
 from .comparison import compare
 from .fixtures import FixtureValidationError, load_pack, validate_split_boundary
 from .replay import replay
+from .veto import CutoffVeto
 
 
-DETECTOR_FACTORIES = {"v1": AudioBaseline}
+DETECTOR_FACTORIES = {"v1": AudioBaseline, "veto": CutoffVeto}
 
 
 def main() -> None:

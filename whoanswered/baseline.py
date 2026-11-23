@@ -28,6 +28,17 @@ def decode_mulaw(sample: int) -> int:
 _SAMPLE_SQUARES = tuple(decode_mulaw(sample) ** 2 for sample in range(256))
 
 
+def is_active_frame(audio: bytes) -> bool:
+    """Apply the v1 energy threshold to a media frame."""
+    energy = sum(_SAMPLE_SQUARES[sample] for sample in audio)
+    return energy >= ACTIVE_MEAN_SQUARE * len(audio)
+
+
+def is_short_greeting_then_pause(greeting_ms: int, pause_ms: int) -> bool:
+    """Apply the v1 timing rule to a greeting and its following pause."""
+    return HUMAN_MIN_MS <= greeting_ms <= HUMAN_MAX_MS and pause_ms >= HUMAN_PAUSE_MS
+
+
 @dataclass(frozen=True, slots=True)
 class DetectorUpdate:
     """A trace reason, optionally accompanied by a verdict."""
@@ -67,8 +78,7 @@ class AudioBaseline:
         return None
 
     def _media(self, sample_start_ms: int, audio: bytes) -> DetectorUpdate | None:
-        energy = sum(_SAMPLE_SQUARES[sample] for sample in audio)
-        active = energy >= ACTIVE_MEAN_SQUARE * len(audio)
+        active = is_active_frame(audio)
         if not self._committed and sample_start_ms >= self._next_sample_ms:
             self._pending.setdefault(sample_start_ms, active)
             update = self._advance_greeting()
@@ -97,10 +107,7 @@ class AudioBaseline:
                         return DetectorUpdate("long_greeting", "voicemail")
             elif self._greeting_ms:
                 self._pause_ms += FRAME_MS
-                if (
-                    HUMAN_MIN_MS <= self._greeting_ms <= HUMAN_MAX_MS
-                    and self._pause_ms >= HUMAN_PAUSE_MS
-                ):
+                if is_short_greeting_then_pause(self._greeting_ms, self._pause_ms):
                     return DetectorUpdate("short_greeting_then_pause", "human")
         return None
 
