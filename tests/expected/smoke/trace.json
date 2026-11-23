@@ -1,10 +1,35 @@
 [
   {
-    "event": "fixture_read",
-    "sha256": "1f34be94c0f6303063808553c7e906fedaf542afe7fc5d52040008ebfbe35038"
+    "at_ms": 0,
+    "event": "call_answered",
+    "sequence": 1
   },
   {
-    "event": "decision",
-    "reason": "classification_not_implemented"
+    "at_ms": 0,
+    "event": "start",
+    "sequence": 2
+  },
+  {
+    "at_ms": 20,
+    "event": "media",
+    "sample_start_ms": 0,
+    "sequence": 3,
+    "sha256": "0052516839b94ee314a4e3b398c8036de3790d672194987a394ee60323848539"
+  },
+  {
+    "at_ms": 40,
+    "event": "media",
+    "sample_start_ms": 20,
+    "sequence": 4,
+    "sha256": "0052516839b94ee314a4e3b398c8036de3790d672194987a394ee60323848539"
+  },
+  {
+    "at_ms": 40,
+    "event": "stop",
+    "sequence": 5
+  },
+  {
+    "at_ms": 2000,
+    "event": "cutoff"
   }
 ]
