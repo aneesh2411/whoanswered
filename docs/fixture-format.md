@@ -21,6 +21,7 @@ is a nonempty array sorted by `id` in lexicographic order.
 | `provenance` | Nonempty description of where the case data came from or how it was generated. |
 | `license` | Nonempty license identifier or reference, such as `MIT`. |
 | `payloads` | Object with entries named `audio.ulaw`, `events.jsonl`, and `expected.json`. Each entry contains `path` and `sha256`. |
+| `policy_events` | Optional list for the `policy` track. Each record has a nonnegative, answer-relative integer `at_ms` and an `event` of `screener`, `prompt_end`, `human_takeover`, `mailbox_ready`, or `disconnect`. |
 
 Each payload `path` is relative to the pack root, uses `/` separators, and ends
 with the corresponding filename. Paths with empty, `.` or `..` components,
@@ -101,6 +102,29 @@ initial decision at 2,000 ms, and `trace.json` lists observations in delivery
 order, including any later verdicts. Both files go directly under `--out`
 for a single case, or under one subdirectory per case ID for a pack with
 multiple cases.
+
+Replay also writes `scorecard.json` and `traces.jsonl` directly under
+`--out`. The JSONL file has one record per case in manifest order, with its
+frozen `initial_decision`, detector `observations`, injected `policy_events`,
+and timestamped playback `actions`. The playback policy uses the injected
+events and records its actions in an in-memory sink. At equal timestamps,
+disconnect has priority and the remaining events retain their script order.
+
+The scorecard records a numerator, denominator, and rate for each metric.
+
+- Committed coverage divides initial verdicts other than `uncertain` by
+  all acoustic cases.
+- Committed error divides commitments that disagree with the eventual
+  answerer by all acoustic commitments.
+- Wrong voicemail routing divides human cases with any `play_voicemail`
+  action by all cases with a human answerer, including the policy track.
+
+A zero denominator produces a JSON `null` rate. Matched-prefix assertions
+check that both cases have identical detector inputs through the cutoff and
+an `uncertain` initial verdict. Policy assertions compare the exact sequence
+and timestamps of actual and expected actions for each policy case. Injected
+events are delivered only to the playback policy. Acoustic recognition metrics
+use only the acoustic track.
 
 ## Canonical bytes
 

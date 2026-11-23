@@ -7,6 +7,8 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
+from .policy import PolicyEvent
+
 
 SCHEMA_VERSION = 1
 PACK_VERSION = 1
@@ -69,6 +71,7 @@ class FixtureCase:
     license: str
     observable: ObservableInput
     expected: EvaluatorAssertions
+    policy_events: tuple[PolicyEvent, ...] = ()
 
 
 def canonical_json(value: object) -> bytes:
@@ -231,6 +234,26 @@ def _read_expected(raw: bytes, location: str) -> EvaluatorAssertions:
     return EvaluatorAssertions(answerer, pair, verdict, tuple(assertions))
 
 
+def _read_policy_events(entry: dict) -> tuple[PolicyEvent, ...]:
+    if "policy_events" not in entry:
+        return ()
+    location = f"{entry['id']}/policy_events"
+    records = entry["policy_events"]
+    if entry["track"] != "policy" or not isinstance(records, list):
+        raise FixtureValidationError("INVALID_POLICY_EVENTS", location)
+
+    events = []
+    for index, record in enumerate(records):
+        if (not isinstance(record, dict) or record.keys() != {"event", "at_ms"}
+                or record["event"] not in (
+                    "screener", "prompt_end", "human_takeover", "mailbox_ready", "disconnect"
+                )
+                or not _nonnegative_int(record["at_ms"])):
+            raise FixtureValidationError("INVALID_POLICY_EVENT", f"{location}/{index}")
+        events.append(PolicyEvent(record["event"], record["at_ms"]))
+    return tuple(events)
+
+
 def _read_case(root: Path, entry: dict) -> FixtureCase:
     case_id = entry["id"]
     for field, code in (
@@ -255,7 +278,7 @@ def _read_case(root: Path, entry: dict) -> FixtureCase:
     expected = _read_expected(expected_data, f"{case_id}/expected.json")
     return FixtureCase(
         case_id, entry["track"], entry["source_group"], entry["provenance"], entry["license"],
-        ObservableInput(audio, events), expected,
+        ObservableInput(audio, events), expected, _read_policy_events(entry),
     )
 
 
