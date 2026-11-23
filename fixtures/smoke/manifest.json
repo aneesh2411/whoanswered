@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "id": "smoke",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "audio.ulaw",
+          "sha256": "1f34be94c0f6303063808553c7e906fedaf542afe7fc5d52040008ebfbe35038"
+        },
+        "events.jsonl": {
+          "path": "events.jsonl",
+          "sha256": "65e0d24bec97999c6f33bd827952224003daa7bb74f418656861ca2434fe8d4e"
+        },
+        "expected.json": {
+          "path": "expected.json",
+          "sha256": "ead94f46eb57cecc2473f9671731f7eb91c150c96988ba166c323cf645c015fb"
+        }
+      },
+      "provenance": "Two locally generated frames of G.711 mu-law digital silence. Events are scripted.",
+      "source_group": "synthetic-silence",
+      "track": "acoustic"
+    }
+  ],
+  "pack_version": 1,
+  "schema_version": 1
+}

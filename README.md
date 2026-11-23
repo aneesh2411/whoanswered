@@ -12,14 +12,15 @@ access.
 
 ```sh
 python -m whoanswered --help
+python -m whoanswered validate --pack fixtures/smoke
 python -m whoanswered replay --pack fixtures/smoke --out build/smoke
-python -m unittest tests.test_smoke
+python -m unittest tests.test_fixtures tests.test_smoke
 ```
 
-The smoke pack contains one synthetic greeting in `fixtures/smoke/greeting.txt`.
-The replay writes `build/smoke/result.json` with a provisional `uncertain`
-decision and `build/smoke/trace.json` with the fixture's SHA-256 and the reason
-for the decision. Classification is outside the smoke replay's scope.
+The smoke pack contains two frames of synthetic silence and scripted call
+events. Replay validates the pack and writes `build/smoke/result.json` with a
+provisional `uncertain` decision and `build/smoke/trace.json` with the audio's
+SHA-256 and the reason for the decision. See [Fixture pack format](docs/fixture-format.md).
 
 The smoke test pins the fixture bytes and compares both output files byte for
 byte with the committed expectations in `tests/expected/smoke/`.
