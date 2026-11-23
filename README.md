@@ -108,6 +108,21 @@ python -m unittest discover -s tests
 
 [Case matrix, generation, and license](fixtures/v2/README.md)
 
+## Compare bundled detectors
+
+```sh
+python -m whoanswered compare --pack fixtures/v2/eval --out build/compare
+python -m unittest tests.test_comparison
+```
+
+`build/compare/comparison.json` lists the shared eligible cases and reports
+each bundled detector's coverage, errors in both directions, correct
+commitments, abstentions, and median commitment time through 2,000 ms. The
+report has separate sections for matched-prefix and scripted policy checks.
+Each candidate's promotion result applies both checks and the revision 2
+metric rules. The bundled registry currently contains the `v1` reference.
+[Revision 2 evaluation rules](docs/fixture-format.md#revision-2-evaluation-rules)
+
 ## License
 
 [MIT](LICENSE) · [Fixture license](fixtures/LICENSE.md)
