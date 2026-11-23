@@ -1,12 +1,21 @@
 """Replay a validated local fixture pack."""
 
 import hashlib
-from collections.abc import Callable, Iterator
-from dataclasses import dataclass
+from collections.abc import Callable, Iterable, Iterator
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from .baseline import AudioBaseline, DetectorUpdate
-from .fixtures import FRAME_MS, ObservableInput, canonical_json, load_pack
+from .fixtures import (
+    FRAME_MS,
+    FixtureCase,
+    ObservableInput,
+    canonical_json,
+    canonical_jsonl,
+    load_pack,
+)
+from .policy import InMemoryPlaybackSink, PlaybackAction, PolicyEvent, run_policy
+from .scorecard import build_scorecard
 
 
 CUTOFF_MS = 2_000
@@ -25,17 +34,56 @@ class Observation:
 
 # A detector may return a verdict, a trace reason with an optional verdict, or None.
 Detector = Callable[[Observation], str | DetectorUpdate | None]
+PolicyRunner = Callable[[Iterable[PolicyEvent], InMemoryPlaybackSink], None]
+
+
+@dataclass
+class CaseReplay:
+    case: FixtureCase
+    initial_verdict: str
+    observations: list[dict]
+    actions: list[PlaybackAction]
+
+    def initial_decision(self) -> dict:
+        return {"at_ms": CUTOFF_MS, "decision": self.initial_verdict, "provisional": True}
 
 
 def replay(
-    pack: Path, out: Path, *, detector_factory: Callable[[], Detector] | None = None
+    pack: Path,
+    out: Path,
+    *,
+    detector_factory: Callable[[], Detector] | None = None,
+    policy_runner: PolicyRunner = run_policy,
 ) -> None:
-    """Replay a validated pack with a fresh detector for each case."""
+    """Replay a validated pack with a fresh detector and playback sink for each case."""
     cases = load_pack(pack)
     factory = AudioBaseline if detector_factory is None else detector_factory
+    results = []
     for case in cases:
-        case_out = out if len(cases) == 1 else out / case.case_id
-        _replay_case(case.observable, case_out, factory())
+        initial_verdict, observations = _run_detector(case.observable, factory())
+        sink = InMemoryPlaybackSink()
+        if case.track == "policy":
+            policy_runner(case.policy_events, sink)
+        results.append(CaseReplay(case, initial_verdict, observations, sink.trace))
+
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "scorecard.json").write_bytes(canonical_json(build_scorecard(results)))
+    (out / "traces.jsonl").write_bytes(canonical_jsonl([
+        {
+            "case_id": result.case.case_id,
+            "track": result.case.track,
+            "initial_decision": result.initial_decision(),
+            "observations": result.observations,
+            "policy_events": [asdict(event) for event in result.case.policy_events],
+            "actions": [asdict(action) for action in result.actions],
+        }
+        for result in results
+    ]))
+    for result in results:
+        case_out = out if len(results) == 1 else out / result.case.case_id
+        case_out.mkdir(parents=True, exist_ok=True)
+        (case_out / "result.json").write_bytes(canonical_json(result.initial_decision()))
+        (case_out / "trace.json").write_bytes(canonical_json(result.observations))
 
 
 def _observations(observable: ObservableInput) -> Iterator[Observation]:
@@ -63,9 +111,9 @@ def _observations(observable: ObservableInput) -> Iterator[Observation]:
         yield Observation("cutoff", CUTOFF_MS)
 
 
-def _replay_case(observable: ObservableInput, out: Path, detector: Detector) -> None:
+def _run_detector(observable: ObservableInput, detector: Detector) -> tuple[str, list[dict]]:
     first_verdict = None
-    result = None
+    initial_verdict = None
     trace = []
     for observation in _observations(observable):
         update = detector(observation)
@@ -73,15 +121,11 @@ def _replay_case(observable: ObservableInput, out: Path, detector: Detector) -> 
             verdict, reason = update.verdict, update.reason
         else:
             verdict, reason = update, None
-        if result is None:
+        if initial_verdict is None:
             if first_verdict is None:
                 first_verdict = verdict
             if observation.event == "cutoff":
-                result = {
-                    "at_ms": observation.at_ms,
-                    "decision": "uncertain" if first_verdict is None else first_verdict,
-                    "provisional": True,
-                }
+                initial_verdict = "uncertain" if first_verdict is None else first_verdict
 
         entry = {"at_ms": observation.at_ms, "event": observation.event}
         if observation.sequence is not None:
@@ -95,6 +139,5 @@ def _replay_case(observable: ObservableInput, out: Path, detector: Detector) -> 
             entry["verdict"] = verdict
         trace.append(entry)
 
-    out.mkdir(parents=True, exist_ok=True)
-    for filename, payload in (("result.json", result), ("trace.json", trace)):
-        (out / filename).write_bytes(canonical_json(payload))
+    assert initial_verdict is not None
+    return initial_verdict, trace

@@ -1,0 +1,201 @@
+{
+  "acoustic": {
+    "committed_coverage": {
+      "denominator": 23,
+      "numerator": 7,
+      "rate": 0.30434782608695654
+    },
+    "committed_error": {
+      "denominator": 7,
+      "numerator": 3,
+      "rate": 0.42857142857142855
+    },
+    "verdict_assertions": {
+      "failures": [
+        {
+          "actual": "human",
+          "case_id": "paused-mailbox-away",
+          "expected": "uncertain"
+        },
+        {
+          "actual": "human",
+          "case_id": "paused-mailbox-away-long-gap",
+          "expected": "uncertain"
+        },
+        {
+          "actual": "human",
+          "case_id": "paused-mailbox-later-long-gap",
+          "expected": "uncertain"
+        }
+      ],
+      "passed": 20,
+      "total": 23
+    }
+  },
+  "matched_prefix_assertions": [
+    {
+      "identical_prefix": true,
+      "initial_verdicts": {
+        "matched-hello-human": "uncertain",
+        "matched-hello-mailbox": "uncertain"
+      },
+      "matched_pair": "hello-2000",
+      "passed": true
+    }
+  ],
+  "policy_assertions": {
+    "cases": [
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 2420
+          }
+        ],
+        "case_id": "simulated-screener-caller-to-disconnect",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 2420
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 2420
+          }
+        ],
+        "case_id": "simulated-screener-caller-to-human",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 2420
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 2420
+          }
+        ],
+        "case_id": "simulated-screener-caller-to-mailbox",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 2420
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 1980
+          }
+        ],
+        "case_id": "simulated-screener-name-to-disconnect",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 1980
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 1980
+          }
+        ],
+        "case_id": "simulated-screener-name-to-human",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 1980
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 1980
+          }
+        ],
+        "case_id": "simulated-screener-name-to-mailbox",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 1980
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "passed": 6,
+    "total": 6
+  },
+  "wrong_voicemail_routing": {
+    "denominator": 7,
+    "numerator": 0,
+    "rate": 0.0
+  }
+}

@@ -34,8 +34,16 @@ simulated screener transitions for the policy track.
 
 ```sh
 python -m whoanswered validate --pack fixtures/v1
-python -m unittest tests.test_challenge_pack
+python -m whoanswered replay --pack fixtures/v1 --out build/replay
+python -m unittest tests.test_challenge_pack tests.test_scorecard
 ```
+
+The replay writes `build/replay/scorecard.json` and
+`build/replay/traces.jsonl`. The scorecard reports committed coverage across
+acoustic fixtures and errors among those commitments. It measures wrong
+voicemail routing across all human fixtures and reports the scripted policy
+assertions separately. Each trace keeps the initial verdict at 2,000 ms and
+records subsequent observations and playback actions at their own times.
 
 [Challenge pack and generator notes](fixtures/v1/README.md)
 

@@ -2,3 +2,5 @@
 /fixtures/**/*.jsonl text eol=lf
 /fixtures/**/*.ulaw binary
 /tests/expected/smoke/*.json text eol=lf
+/tests/expected/v1/*.json text eol=lf
+/tests/expected/v1/*.jsonl text eol=lf
