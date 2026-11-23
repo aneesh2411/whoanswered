@@ -4,6 +4,48 @@ WhoAnswered is the Two-Second Decision Challenge, an open benchmark for the
 first two seconds of an outbound call. It asks who or what answered, when an
 agent should commit to a decision, and when it should say it is uncertain.
 
+## Reviewer walkthrough
+
+From the extracted ZIP directory, run the public v1 replay with Python 3.12.
+It uses the standard library and CPU, with no network access or credentials.
+
+```sh
+python -m whoanswered replay --pack fixtures/v1 --out build/replay
+```
+
+Compare `build/replay/scorecard.json` with the bundled
+`reference/scorecard.json`. The files should match byte for byte.
+
+1. **Clear human pickup.** Open
+   `build/replay/clean-pickup-hello/result.json` for the `human` decision at
+   2,000 ms and `build/replay/clean-pickup-hello/trace.json` for the observations
+   and detector verdict leading up to it.
+2. **Matched-prefix pair.** Compare
+   `build/replay/matched-hello-human/trace.json` and
+   `build/replay/matched-hello-mailbox/trace.json`. Their observations match
+   through 2,000 ms and diverge afterward. Both `initial_verdicts` are
+   `uncertain` in the `hello-2000` entry under `matched_prefix_assertions` in
+   `build/replay/scorecard.json`.
+3. **Simulated screener handoff.** Find `simulated-screener-caller-to-human`
+   in `build/replay/traces.jsonl`. Its `actions` show
+   `reply_identity_and_purpose` at 1,020 ms and `start_conversation` at
+   2,420 ms after human takeover. Its `initial_decision` records `uncertain`
+   at 2,000 ms. The same case appears under `policy_assertions` in
+   `build/replay/scorecard.json`.
+
+## Build and verify the reviewer ZIP
+
+Run from the repository root with Python 3.12.
+
+```sh
+python -m whoanswered bundle --pack fixtures/v1 --out build/whoanswered-v1.zip
+python -m unittest tests.test_release
+```
+
+The tests verify byte stability and compare replay outputs from a clean
+extraction with the committed scorecard and traces, including a replay with
+socket operations denied.
+
 ## Run the smoke replay
 
 Run these commands from the repository root with Python 3.12. The replay uses
@@ -32,6 +74,8 @@ byte with the committed expectations in `tests/expected/smoke/`.
 mailbox pair with identical observations through 2,000 ms. It also includes
 simulated screener transitions for the policy track.
 
+Run these commands from the repository root.
+
 ```sh
 python -m whoanswered validate --pack fixtures/v1
 python -m whoanswered replay --pack fixtures/v1 --out build/replay
@@ -49,4 +93,4 @@ records subsequent observations and playback actions at their own times.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) · [Fixture license](fixtures/LICENSE.md)
