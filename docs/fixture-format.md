@@ -8,10 +8,10 @@ writes any results.
 
 ## Manifest
 
-`manifest.json` contains `schema_version` and `pack_version`, both JSON
-integers set to `1` for this format. The schema version identifies the file
-contract. The pack version identifies the supported pack revision. `cases`
-is a nonempty array sorted by `id` in lexicographic order.
+`manifest.json` contains the JSON integers `schema_version` and
+`pack_version`. The fixture schema is `1` for both supported pack revisions
+(`1` and `2`). `cases` is a nonempty array sorted by `id` in lexicographic
+order.
 
 | Case field | Meaning |
 | --- | --- |
@@ -20,6 +20,7 @@ is a nonempty array sorted by `id` in lexicographic order.
 | `source_group` | Nonempty identifier shared by cases derived from the same source. |
 | `provenance` | Nonempty description of where the case data came from or how it was generated. |
 | `license` | Nonempty license identifier or reference, such as `MIT`. |
+| `split` | Required in pack revision `2`. Use `dev` for development or `eval` for reserved evaluation. Revision `1` cases load with no split. |
 | `payloads` | Object with entries named `audio.ulaw`, `events.jsonl`, and `expected.json`. Each entry contains `path` and `sha256`. |
 | `policy_events` | Optional list for the `policy` track. Each record has a nonnegative, answer-relative integer `at_ms` and an `event` of `screener`, `prompt_end`, `human_takeover`, `mailbox_ready`, or `disconnect`. |
 
@@ -75,9 +76,9 @@ Each `expected.json` contains these fields.
 
 `whoanswered.fixtures.load_pack(Path(...))` returns cases in manifest order.
 Each case exposes audio bytes and ordered events through `.observable`, and
-answerer, pair membership, verdict, and actions through `.expected`. Case
-metadata lives on the enclosing case. Replay passes `.observable` to the
-case runner.
+answerer, pair membership, verdict, and actions through `.expected`. Split
+membership and the rest of the case metadata live on the enclosing case.
+Replay passes `.observable` to the case runner.
 
 ## Replay and cutoff
 
@@ -125,6 +126,67 @@ an `uncertain` initial verdict. Policy assertions compare the exact sequence
 and timestamps of actual and expected actions for each policy case. Injected
 events are delivered only to the playback policy. Acoustic recognition metrics
 use only the acoustic track.
+
+## Revision 2 evaluation rules
+
+### Development and reserved evaluation
+
+Use `dev` to design the detector, select thresholds, and diagnose mistakes.
+Freeze split assignments, case membership, assertions, and payload digests
+before tuning. Use `eval` for the final comparison after freezing the candidate
+detector and configuration. Keep sources used in development, including any
+reused public v1 material, out of reserved evaluation. Reserve a fresh
+evaluation set for any tuning informed by an earlier evaluation.
+
+Put each source group and all its variants in one split, even when timing,
+noise, media gaps, or eventual outcomes differ. Keep both members of a matched
+pair in the same pack and split. Copied audio openings also belong in one
+split, even if the fixtures have different group IDs.
+
+Validation checks the first non-silent 20 ms frame of the stored audio and
+the first non-silent frame in delivery order through the cutoff. Sharing
+either opening across splits is a validation error, even
+when playback timing or the following audio differs. The check ignores
+leading digital silence and treats the two mu-law zero codes alike. Empty
+and entirely digital-silent openings can be shared. Use the same source
+group for transformed copies whose frame bytes differ.
+
+`load_pack` checks split isolation within a revision 2 pack. If dev and eval
+live in separate directories, validate both together before freezing them.
+
+```sh
+python -m whoanswered validate --pack path/to/dev --pack path/to/eval
+```
+
+### Eligibility, reporting, and promotion
+
+Use the same frozen reserved `eval` cases and the same 2,000 ms cutoff for
+both the `v1` detector and the candidate. Eligible cases are unpaired
+`acoustic` fixtures whose eventual answerer is `human` or `voicemail`.
+Matched-prefix assertions and scripted policy checks must pass as separate
+gates. Cases with other truth labels, including silence, unknown answerers, and
+disconnects, are outside this denominator. Include every eligible case
+even when the audio is quiet, incomplete, or ambiguous. Select eligible
+cases before replay and use the same denominator for both detectors.
+
+For each detector, the comparison report must print committed coverage
+(commitments divided by all eligible cases), committed error (wrong
+commitments divided by commitments), and correct-over-all-eligible
+(correct commitments divided by all eligible cases). Count a frozen
+verdict other than `uncertain` as a commitment and compare it to the
+eventual answerer. Report human-as-mailbox and mailbox-as-human separately,
+using all eligible cases of the respective true class as the denominator.
+Print the median commitment time in milliseconds from answer, using the
+observation time of the verdict that froze each commitment, including wrong
+ones. Average the middle two times for an even count. Report `null` for
+rates with zero denominators and for the median when there are no commitments.
+
+Promote the candidate only if coverage is at least `v1` coverage, neither
+human-as-mailbox nor mailbox-as-human errors increase, and correct
+commitments strictly increase or wrong commitments strictly decrease.
+Compare the unrounded counts on the common eligible set. Keep `v1` when
+the candidate misses the rule. The revision 1 replay scorecard retains its
+original metrics and denominators.
 
 ## Canonical bytes
 

@@ -1,9 +1,10 @@
-"""Read and validate version 1 local fixture packs."""
+"""Read and validate local fixture packs."""
 
 import hashlib
 import json
 import re
 from collections import Counter
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,9 +12,12 @@ from .policy import PolicyEvent
 
 
 SCHEMA_VERSION = 1
-PACK_VERSION = 1
+PACK_VERSION = 1  # Frozen revision written by the public v1 generator.
+PACK_VERSIONS = (PACK_VERSION, 2)
 FRAME_BYTES = 160
 FRAME_MS = 20
+CUTOFF_MS = 2_000
+SILENT_FRAME = b"\xff" * FRAME_BYTES
 PAYLOAD_NAMES = ("audio.ulaw", "events.jsonl", "expected.json")
 CASE_ID = re.compile(r"[a-zA-Z0-9][a-zA-Z0-9_-]*")
 SHA256 = re.compile(r"[0-9a-f]{64}")
@@ -72,6 +76,11 @@ class FixtureCase:
     observable: ObservableInput
     expected: EvaluatorAssertions
     policy_events: tuple[PolicyEvent, ...] = ()
+    split: str | None = None
+
+
+def frame_ends_by_cutoff(frame_index: int) -> bool:
+    return (frame_index + 1) * FRAME_MS <= CUTOFF_MS
 
 
 def canonical_json(value: object) -> bytes:
@@ -254,7 +263,7 @@ def _read_policy_events(entry: dict) -> tuple[PolicyEvent, ...]:
     return tuple(events)
 
 
-def _read_case(root: Path, entry: dict) -> FixtureCase:
+def _read_case(root: Path, entry: dict, pack_version: int) -> FixtureCase:
     case_id = entry["id"]
     for field, code in (
         ("track", "INVALID_TRACK"),
@@ -264,6 +273,11 @@ def _read_case(root: Path, entry: dict) -> FixtureCase:
     ):
         if not _nonblank(entry.get(field)):
             raise FixtureValidationError(code, case_id)
+    split = None
+    if pack_version == 2:
+        split = entry.get("split")
+        if split not in ("dev", "eval"):
+            raise FixtureValidationError("INVALID_SPLIT", case_id)
     payloads = entry.get("payloads")
     if not isinstance(payloads, dict) or payloads.keys() != set(PAYLOAD_NAMES):
         raise FixtureValidationError("INVALID_PAYLOADS", case_id)
@@ -278,8 +292,56 @@ def _read_case(root: Path, entry: dict) -> FixtureCase:
     expected = _read_expected(expected_data, f"{case_id}/expected.json")
     return FixtureCase(
         case_id, entry["track"], entry["source_group"], entry["provenance"], entry["license"],
-        ObservableInput(audio, events), expected, _read_policy_events(entry),
+        ObservableInput(audio, events), expected, _read_policy_events(entry), split,
     )
+
+
+def _decision_frames(observable: ObservableInput) -> Iterator[bytes]:
+    for event in observable.events:
+        if event.arrival_ms > CUTOFF_MS:
+            break
+        index = event.frame_index
+        if index is not None and frame_ends_by_cutoff(index):
+            yield observable.frame(index)
+
+
+def _opening_frame(frames: Iterable[bytes]) -> bytes | None:
+    for frame in frames:
+        # Both G.711 mu-law zero codes represent the same silence.
+        frame = frame.replace(b"\x7f", b"\xff")
+        if frame != SILENT_FRAME:
+            return frame
+    return None
+
+
+def validate_split_boundary(cases: Iterable[FixtureCase]) -> None:
+    """Reject leakage between dev and eval, including across validated packs."""
+    split_cases = [case for case in cases if case.split is not None]
+    if len({case.split for case in split_cases}) < 2:
+        return
+
+    sources: dict[str, str | None] = {}
+    pairs: dict[str, str | None] = {}
+    for case in split_cases:
+        if sources.setdefault(case.source_group, case.split) != case.split:
+            raise FixtureValidationError("SPLIT_SOURCE_GROUP", case.source_group)
+        pair = case.expected.matched_pair
+        if pair is not None and pairs.setdefault(pair, case.split) != case.split:
+            raise FixtureValidationError("SPLIT_MATCHED_PAIR", pair)
+
+    openings: dict[bytes, FixtureCase] = {}
+    for case in split_cases:
+        audio = case.observable.audio
+        stored_frames = (
+            audio[start : start + FRAME_BYTES] for start in range(0, len(audio), FRAME_BYTES)
+        )
+        case_openings = (_opening_frame(stored_frames), _opening_frame(_decision_frames(case.observable)))
+        for opening in case_openings:
+            if opening is not None:
+                other = openings.setdefault(opening, case)
+                if other.split != case.split:
+                    location = "/".join(sorted((other.case_id, case.case_id)))
+                    raise FixtureValidationError("SPLIT_AUDIO_PREFIX", location)
 
 
 def load_pack(pack: Path) -> tuple[FixtureCase, ...]:
@@ -290,12 +352,12 @@ def load_pack(pack: Path) -> tuple[FixtureCase, ...]:
         raise FixtureValidationError("FILE_UNREADABLE", "manifest.json") from error
     raw = _pack_file(root, "manifest.json")
     manifest = _read_object(raw, "manifest.json")
-    for field, version, code in (
-        ("schema_version", SCHEMA_VERSION, "UNSUPPORTED_SCHEMA_VERSION"),
-        ("pack_version", PACK_VERSION, "UNSUPPORTED_PACK_VERSION"),
+    for field, versions, code in (
+        ("schema_version", (SCHEMA_VERSION,), "UNSUPPORTED_SCHEMA_VERSION"),
+        ("pack_version", PACK_VERSIONS, "UNSUPPORTED_PACK_VERSION"),
     ):
         value = manifest.get(field)
-        if type(value) is not int or value != version:
+        if type(value) is not int or value not in versions:
             raise FixtureValidationError(code, "manifest.json")
     entries = manifest.get("cases")
     if not isinstance(entries, list) or not entries:
@@ -314,7 +376,7 @@ def load_pack(pack: Path) -> tuple[FixtureCase, ...]:
     if case_ids != sorted(case_ids):
         raise FixtureValidationError("CASES_UNSORTED", "manifest.json")
 
-    cases = tuple(_read_case(root, entry) for entry in entries)
+    cases = tuple(_read_case(root, entry, manifest["pack_version"]) for entry in entries)
     pair_counts = Counter(
         case.expected.matched_pair for case in cases if case.expected.matched_pair is not None
     )
@@ -322,4 +384,5 @@ def load_pack(pack: Path) -> tuple[FixtureCase, ...]:
         if count != 2:
             raise FixtureValidationError("INVALID_MATCHED_PAIR", pair)
     _check_canonical(raw, manifest, "manifest.json")
+    validate_split_boundary(cases)
     return cases
