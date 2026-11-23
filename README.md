@@ -94,6 +94,20 @@ records subsequent observations and playback actions at their own times.
 
 [Challenge pack and generator notes](fixtures/v1/README.md)
 
+## v2 development and reserved evaluation packs
+
+The revision 2 development and reserved evaluation packs each contain 20
+authored, synthetic acoustic scenarios. Transfer to real phone audio is
+untested. Use `dev` for detector development and keep `eval` frozen for final
+comparison after the detector and configuration are fixed.
+
+```sh
+python -m whoanswered validate --pack fixtures/v2/dev --pack fixtures/v2/eval
+python -m unittest discover -s tests
+```
+
+[Case matrix, generation, and license](fixtures/v2/README.md)
+
 ## License
 
 [MIT](LICENSE) · [Fixture license](fixtures/LICENSE.md)
