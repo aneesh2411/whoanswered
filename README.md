@@ -97,9 +97,10 @@ records subsequent observations and playback actions at their own times.
 ## v2 development and reserved evaluation packs
 
 The revision 2 development and reserved evaluation packs each contain 20
-authored, synthetic acoustic scenarios. Transfer to real phone audio is
-untested. Use `dev` for detector development and keep `eval` frozen for final
-comparison after the detector and configuration are fixed.
+scenarios with authored synthetic audio. The `eval` split was authored
+alongside `dev`. Transfer to real phone audio is untested. Use `dev` for
+detector development and keep `eval` frozen for final comparison after the
+detector and configuration are fixed.
 
 ```sh
 python -m whoanswered validate --pack fixtures/v2/dev --pack fixtures/v2/eval
@@ -122,16 +123,26 @@ The cutoff observation in the replay trace records the decision and its reason.
 
 ```sh
 python -m whoanswered replay --pack fixtures/v2/dev --detector veto --out build/veto
-python -m whoanswered compare --pack fixtures/v2/eval --out build/compare
-python -m unittest tests.test_comparison
+python -m whoanswered compare --pack fixtures/v2/eval --policy-pack fixtures/v1 --out build/compare
+cmp docs/v2-eval-comparison.json build/compare/comparison.json
 ```
 
-`build/compare/comparison.json` lists the shared eligible cases and reports
-each bundled detector's coverage, errors in both directions, correct
-commitments, abstentions, and median commitment time through 2,000 ms. The
-report has separate sections for matched-prefix and scripted policy checks.
-Each candidate's promotion result applies both checks and the revision 2
-metric rules.
+The offline comparison uses Python 3.12 and the 2,000 ms cutoff for all three
+detectors. The report pins each pack by its manifest SHA-256, which covers the
+payload hashes. It records the thresholds and identifies detector versions by
+SHA-256 digests of the Python sources with LF line endings. The EVAL
+matched-prefix pair passed for all three detectors. All six public v1 scripted
+policy cases passed the separate policy gate.
+
+| Detector | Committed coverage | Correct / eligible | Wrong commitments | Human as mailbox | Mailbox as human | Median commitment |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| v1 | 10/18 | 6/18 | 4 | 0/10 | 4/8 | 900 ms |
+| Veto | 6/18 | 3/18 | 3 | 0/10 | 3/8 | 2,000 ms |
+| Score, 12 frames | 6/18 | 3/18 | 3 | 0/10 | 3/8 | 2,000 ms |
+
+**v1 stays as the reference.** Neither candidate met the promotion rule
+because both fell below v1's coverage.
+[Published EVAL report](docs/v2-eval-comparison.json) ·
 [Revision 2 evaluation rules](docs/fixture-format.md#revision-2-evaluation-rules)
 
 ## License

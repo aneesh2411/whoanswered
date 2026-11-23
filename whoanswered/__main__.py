@@ -3,17 +3,11 @@
 import argparse
 from pathlib import Path
 
-from .baseline import AudioBaseline
 from .bundle import bundle
-from .comparison import compare
+from .comparison import DETECTOR_FACTORIES, compare
 from .fixtures import FixtureValidationError, load_pack, validate_split_boundary
 from .replay import replay
 from .selection import tune
-from .veto import CutoffVeto, EvidenceScore
-
-
-DETECTOR_FACTORIES = {"v1": AudioBaseline, "veto": CutoffVeto}
-REPLAY_FACTORIES = {**DETECTOR_FACTORIES, "score": EvidenceScore}
 
 
 def main() -> None:
@@ -30,6 +24,9 @@ def main() -> None:
     replay_parser.add_argument("--detector", default="v1", help="Detector name (default: v1)")
     compare_parser = commands.add_parser("compare", help="Compare bundled detectors on reserved evaluation cases")
     compare_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 fixture directory")
+    compare_parser.add_argument(
+        "--policy-pack", type=Path, help="Fixture directory for the separate scripted policy checks",
+    )
     compare_parser.add_argument("--out", required=True, type=Path, help="Output directory")
     tune_parser = commands.add_parser("tune", help="Select the operating point on development cases")
     tune_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 dev-only fixture directory")
@@ -45,13 +42,13 @@ def main() -> None:
             if len(packs) > 1:
                 validate_split_boundary(case for pack in packs for case in pack)
         elif args.command == "replay":
-            factory = REPLAY_FACTORIES.get(args.detector)
+            factory = DETECTOR_FACTORIES.get(args.detector)
             if factory is None:
-                available = ", ".join(REPLAY_FACTORIES)
+                available = ", ".join(DETECTOR_FACTORIES)
                 parser.exit(2, f"whoanswered: unknown detector {args.detector!r} (choose from {available})\n")
             replay(args.pack, args.out, detector_factory=factory)
         elif args.command == "compare":
-            compare(args.pack, args.out, detector_factories=DETECTOR_FACTORIES)
+            compare(args.pack, args.out, policy_pack=args.policy_pack)
         elif args.command == "tune":
             tune(args.pack, args.out)
         else:

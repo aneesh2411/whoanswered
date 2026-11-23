@@ -14,7 +14,7 @@ from whoanswered.replay import Observation
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CLI_ARGS = ("compare", "--pack", "fixtures/v2/eval")
+CLI_ARGS = ("compare", "--pack", "fixtures/v2/eval", "--policy-pack", "fixtures/v1")
 ELIGIBLE = ["h-late", "h-right", "h-wrong", "m-abstain", "m-right", "m-wrong"]
 
 
@@ -231,9 +231,11 @@ class ComparisonTest(unittest.TestCase):
             self.assertEqual(metrics[name], rate(0, 0))
 
     def test_cli_byte_stability_and_no_sockets(self):
+        published = (ROOT / "docs/v2-eval-comparison.json").read_bytes()
         outputs = []
         for out, hash_seed, launch in (
             (self.out, "1", ["-m", "whoanswered"]),
+            (self.temp / "repeat", "1", ["-c", DENY_SOCKETS]),
             (self.temp / "other", "867", ["-c", DENY_SOCKETS]),
         ):
             subprocess.run(
@@ -243,11 +245,22 @@ class ComparisonTest(unittest.TestCase):
             self.assertEqual(sorted(path.name for path in out.iterdir()), ["comparison.json"])
             outputs.append((out / "comparison.json").read_bytes())
 
-        self.assertEqual(outputs[0], outputs[1])
-        report = json.loads(outputs[0])
-        self.assertEqual(outputs[0], canonical_json(report))
+        self.assertEqual(outputs, [published] * 3)
+        report = json.loads(published)
+        self.assertEqual(published, canonical_json(report))
+        for field, pack in (
+            ("pack_manifest_sha256", "v2/eval"),
+            ("policy_pack_manifest_sha256", "v1"),
+        ):
+            manifest = (ROOT / "fixtures" / pack / "manifest.json").read_bytes()
+            self.assertEqual(report[field], hashlib.sha256(manifest).hexdigest())
         self.assertEqual(report["acoustic"]["v1"]["committed_coverage"], rate(10, 18))
         self.assertEqual(report["acoustic"]["v1"]["committed_error"], rate(4, 10))
-        self.assertTrue(report["matched_prefix_assertions"]["v1"][0]["passed"])
-        self.assertEqual(set(report["acoustic"]), {"v1", "veto"})
-        self.assertTrue(report["matched_prefix_assertions"]["veto"][0]["passed"])
+        self.assertEqual(set(report["acoustic"]), {"v1", "veto", "score"})
+        self.assertEqual(set(report["detectors"]), set(report["acoustic"]))
+        self.assertEqual(report["detectors"]["score"]["thresholds"]["score_threshold_frames"], 12)
+        for name in report["acoustic"]:
+            self.assertTrue(report["matched_prefix_assertions"][name][0]["passed"])
+        self.assertEqual(report["policy_assertions"]["total"], 6)
+        self.assertEqual(report["policy_assertions"]["passed"], 6)
+        self.assertEqual(report["promotion"], {"score": False, "veto": False})
