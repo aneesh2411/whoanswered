@@ -26,6 +26,19 @@ records the delivered observations, including per-frame SHA-256 digests, in
 The smoke test pins the fixture bytes and compares both output files byte for
 byte with the committed expectations in `tests/expected/smoke/`.
 
+## Public challenge pack
+
+`fixtures/v1` contains 29 synthetic scenarios, including a matched human and
+mailbox pair with identical observations through 2,000 ms. It also includes
+simulated screener transitions for the policy track.
+
+```sh
+python -m whoanswered validate --pack fixtures/v1
+python -m unittest tests.test_challenge_pack
+```
+
+[Challenge pack and generator notes](fixtures/v1/README.md)
+
 ## License
 
 [MIT](LICENSE)

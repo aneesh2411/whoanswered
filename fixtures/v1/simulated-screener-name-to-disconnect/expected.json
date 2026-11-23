@@ -1,0 +1,15 @@
+{
+  "actions": [
+    {
+      "action": "reply_identity_and_purpose",
+      "at_ms": 1180
+    },
+    {
+      "action": "cancel_playback",
+      "at_ms": 1980
+    }
+  ],
+  "answerer": "disconnect",
+  "matched_pair": null,
+  "verdict": "uncertain"
+}

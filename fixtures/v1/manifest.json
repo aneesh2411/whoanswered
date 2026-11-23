@@ -1,0 +1,763 @@
+{
+  "cases": [
+    {
+      "family": "clean-pickup",
+      "id": "clean-pickup-hello",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "clean-pickup-hello/audio.ulaw",
+          "sha256": "9b6cf6159e9f934151fd1c1eb545d794554af696ea1661d56e9bd147964397be"
+        },
+        "events.jsonl": {
+          "path": "clean-pickup-hello/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "clean-pickup-hello/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Human pickup, 'hello?' at 0 ms, then waits. First-party synthetic audio and scripted events.",
+      "seed": 10601,
+      "source_group": "pickup-hello",
+      "track": "acoustic"
+    },
+    {
+      "family": "clean-pickup",
+      "id": "clean-pickup-hello-delayed",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "clean-pickup-hello-delayed/audio.ulaw",
+          "sha256": "23757164ff32fab8a3cbbcd75f92b4fbe1f78742cddcd7b5d089dd244be69df3"
+        },
+        "events.jsonl": {
+          "path": "clean-pickup-hello-delayed/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "clean-pickup-hello-delayed/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Human pickup, 'hello?' at 420 ms, then waits. First-party synthetic audio and scripted events.",
+      "seed": 10601,
+      "source_group": "pickup-hello",
+      "track": "acoustic"
+    },
+    {
+      "family": "clean-pickup",
+      "id": "clean-pickup-yes",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "clean-pickup-yes/audio.ulaw",
+          "sha256": "ec5d48f78eeb583953d1d3ed7aac681fb456c4d3b80c1ed13364050eb30e346e"
+        },
+        "events.jsonl": {
+          "path": "clean-pickup-yes/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "clean-pickup-yes/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Human pickup, 'yes?' at 80 ms, then waits. First-party synthetic audio and scripted events.",
+      "seed": 10602,
+      "source_group": "pickup-yes",
+      "track": "acoustic"
+    },
+    {
+      "family": "clean-pickup",
+      "id": "clean-pickup-yes-late",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "clean-pickup-yes-late/audio.ulaw",
+          "sha256": "28a97985e19ddddd7e48d07510ca8ac35235348730374ae48e65bedc1cca8812"
+        },
+        "events.jsonl": {
+          "path": "clean-pickup-yes-late/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "clean-pickup-yes-late/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Human pickup, 'yes?' at 940 ms, then waits. First-party synthetic audio and scripted events.",
+      "seed": 10602,
+      "source_group": "pickup-yes",
+      "track": "acoustic"
+    },
+    {
+      "family": "confirmed-disconnect",
+      "id": "confirmed-disconnect-at-cutoff",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "confirmed-disconnect-at-cutoff/audio.ulaw",
+          "sha256": "23cbbfb7b659a1e7f7d9002775e1b28a9e710fd3a8f48db0c4220ab7a885c2a2"
+        },
+        "events.jsonl": {
+          "path": "confirmed-disconnect-at-cutoff/events.jsonl",
+          "sha256": "1a806d75db9b643bd5980f605a939e4427bc76dcddbf7c0e56a2303dd4957399"
+        },
+        "expected.json": {
+          "path": "confirmed-disconnect-at-cutoff/expected.json",
+          "sha256": "664bf795628632aa1be69c28f7163cac28943ca06c78af9c04f91c74255659ee"
+        }
+      },
+      "provenance": "Stream stops at 1400 ms. Call completion is confirmed at 2000 ms. First-party synthetic audio and scripted events.",
+      "seed": 10609,
+      "source_group": "confirmed-disconnect",
+      "track": "acoustic"
+    },
+    {
+      "family": "confirmed-disconnect",
+      "id": "confirmed-disconnect-before-stream",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "confirmed-disconnect-before-stream/audio.ulaw",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events.jsonl": {
+          "path": "confirmed-disconnect-before-stream/events.jsonl",
+          "sha256": "c47ba1143429e2b018172fd943abfd45e99860ad61accc13193118f79a06aedc"
+        },
+        "expected.json": {
+          "path": "confirmed-disconnect-before-stream/expected.json",
+          "sha256": "664bf795628632aa1be69c28f7163cac28943ca06c78af9c04f91c74255659ee"
+        }
+      },
+      "provenance": "Call completion is confirmed before the media stream opens. First-party synthetic audio and scripted events.",
+      "seed": 10609,
+      "source_group": "confirmed-disconnect",
+      "track": "acoustic"
+    },
+    {
+      "family": "confirmed-disconnect",
+      "id": "confirmed-disconnect-late",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "confirmed-disconnect-late/audio.ulaw",
+          "sha256": "678bbc4d2ad361c613b602951f285d99bc5cde1cfc0cdd9b29eaa9006900450b"
+        },
+        "events.jsonl": {
+          "path": "confirmed-disconnect-late/events.jsonl",
+          "sha256": "06719b6d535421def9e42c2f665754e511ae8dab210574fd443a6abfc93b0afa"
+        },
+        "expected.json": {
+          "path": "confirmed-disconnect-late/expected.json",
+          "sha256": "664bf795628632aa1be69c28f7163cac28943ca06c78af9c04f91c74255659ee"
+        }
+      },
+      "provenance": "Stream stops at 680 ms. Call completion is confirmed at 2080 ms. First-party synthetic audio and scripted events.",
+      "seed": 10609,
+      "source_group": "confirmed-disconnect",
+      "track": "acoustic"
+    },
+    {
+      "family": "connected-silence",
+      "id": "connected-silence-delayed",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "connected-silence-delayed/audio.ulaw",
+          "sha256": "bd720a5704fa8160ef0a7dc2e31c155e89d6a314b3b0fec0f52f5cb8075381c6"
+        },
+        "events.jsonl": {
+          "path": "connected-silence-delayed/events.jsonl",
+          "sha256": "bf825227b78c17e22b9e00342c133abe383b33796c0d345377e0f92928fe9304"
+        },
+        "expected.json": {
+          "path": "connected-silence-delayed/expected.json",
+          "sha256": "ead94f46eb57cecc2473f9671731f7eb91c150c96988ba166c323cf645c015fb"
+        }
+      },
+      "provenance": "The connected stream delivers silent frames with 240 ms of latency. First-party synthetic audio and scripted events.",
+      "seed": 10607,
+      "source_group": "connected-silence",
+      "track": "acoustic"
+    },
+    {
+      "family": "connected-silence",
+      "id": "connected-silence-digital",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "connected-silence-digital/audio.ulaw",
+          "sha256": "bd720a5704fa8160ef0a7dc2e31c155e89d6a314b3b0fec0f52f5cb8075381c6"
+        },
+        "events.jsonl": {
+          "path": "connected-silence-digital/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "connected-silence-digital/expected.json",
+          "sha256": "ead94f46eb57cecc2473f9671731f7eb91c150c96988ba166c323cf645c015fb"
+        }
+      },
+      "provenance": "The connected stream delivers digital silence. First-party synthetic audio and scripted events.",
+      "seed": 10607,
+      "source_group": "connected-silence",
+      "track": "acoustic"
+    },
+    {
+      "family": "connected-silence",
+      "id": "connected-silence-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "connected-silence-room-tone/audio.ulaw",
+          "sha256": "ed4573e9c181c880a0ec64dc129821aa792ca15962bd9e5444c1909dcac66cb2"
+        },
+        "events.jsonl": {
+          "path": "connected-silence-room-tone/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "connected-silence-room-tone/expected.json",
+          "sha256": "ead94f46eb57cecc2473f9671731f7eb91c150c96988ba166c323cf645c015fb"
+        }
+      },
+      "provenance": "The connected stream delivers low-level synthetic room tone. First-party synthetic audio and scripted events.",
+      "seed": 10607,
+      "source_group": "connected-silence",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-hello",
+      "id": "matched-hello-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "matched-hello-human/audio.ulaw",
+          "sha256": "0729c59a00b1ad8253fa77e7ad4daeba0c43c4f66d4c6eee13fe2af5e05076db"
+        },
+        "events.jsonl": {
+          "path": "matched-hello-human/events.jsonl",
+          "sha256": "d425f2d0d711d688e3a6cd45d167216873c8da09b2f286b995f9bfca95c2b2b9"
+        },
+        "expected.json": {
+          "path": "matched-hello-human/expected.json",
+          "sha256": "a782baf85e9c973802d4bb7694dda64306d584f99b03403c2a351c7870082a0c"
+        }
+      },
+      "provenance": "Shared synthetic 'Hello?' and pause, then a human continuation. First-party synthetic audio and scripted events.",
+      "seed": 10612,
+      "source_group": "matched-hello",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-hello",
+      "id": "matched-hello-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "matched-hello-mailbox/audio.ulaw",
+          "sha256": "abf9a8c00e8bfd6036f8c2345032e9e3571e6812dc6bf2e4edaef05337afe842"
+        },
+        "events.jsonl": {
+          "path": "matched-hello-mailbox/events.jsonl",
+          "sha256": "88829421a33ce900a3208affd52ae60675ddc9fa43ee711d97e0cd1de11046d0"
+        },
+        "expected.json": {
+          "path": "matched-hello-mailbox/expected.json",
+          "sha256": "826a248953258d22633db7953522e558badb33e096856325640bbaeccac9570b"
+        }
+      },
+      "provenance": "Shared synthetic 'Hello?' and pause, then a mailbox continuation. First-party synthetic audio and scripted events.",
+      "seed": 10612,
+      "source_group": "matched-hello",
+      "track": "acoustic"
+    },
+    {
+      "family": "media-loss",
+      "id": "media-loss-gap-and-resume",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "media-loss-gap-and-resume/audio.ulaw",
+          "sha256": "dabf12fa415579f485797695fec60ce9d274e910973a91f7beca94e76830d12c"
+        },
+        "events.jsonl": {
+          "path": "media-loss-gap-and-resume/events.jsonl",
+          "sha256": "5131e79c201c4d0dcb62a8444148199eeba26cff0f620c8ef36a6a7f15134af8"
+        },
+        "expected.json": {
+          "path": "media-loss-gap-and-resume/expected.json",
+          "sha256": "dff351f3e620be2dbccf3185e4fe0c66b87a618117f15e4d0eaa1fcf0c2f485b"
+        }
+      },
+      "provenance": "A midstream gap drops frames before media resumes. First-party synthetic audio and scripted events.",
+      "seed": 10608,
+      "source_group": "media-loss",
+      "track": "acoustic"
+    },
+    {
+      "family": "media-loss",
+      "id": "media-loss-no-frames",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "media-loss-no-frames/audio.ulaw",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events.jsonl": {
+          "path": "media-loss-no-frames/events.jsonl",
+          "sha256": "f43efa135c734a1ec576d45f01e2b88ee82a8e6dfc097bb240aa4fb7f349d0aa"
+        },
+        "expected.json": {
+          "path": "media-loss-no-frames/expected.json",
+          "sha256": "dff351f3e620be2dbccf3185e4fe0c66b87a618117f15e4d0eaa1fcf0c2f485b"
+        }
+      },
+      "provenance": "The stream starts but delivers no media. First-party synthetic audio and scripted events.",
+      "seed": 10608,
+      "source_group": "media-loss",
+      "track": "acoustic"
+    },
+    {
+      "family": "media-loss",
+      "id": "media-loss-stream-stop",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "media-loss-stream-stop/audio.ulaw",
+          "sha256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+        },
+        "events.jsonl": {
+          "path": "media-loss-stream-stop/events.jsonl",
+          "sha256": "dc54422854ca95ab492f2addabef813eac365d51c40585f0423b0f9336522eaf"
+        },
+        "expected.json": {
+          "path": "media-loss-stream-stop/expected.json",
+          "sha256": "dff351f3e620be2dbccf3185e4fe0c66b87a618117f15e4d0eaa1fcf0c2f485b"
+        }
+      },
+      "provenance": "The media stream stops after 240 ms of silence. First-party synthetic audio and scripted events.",
+      "seed": 10608,
+      "source_group": "media-loss",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "paused-mailbox-away",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "paused-mailbox-away/audio.ulaw",
+          "sha256": "24176d2436713b5b5d74697976114d779f783c175eac2b6f6d84b9a5cb32334e"
+        },
+        "events.jsonl": {
+          "path": "paused-mailbox-away/events.jsonl",
+          "sha256": "094a5c625c85ab7175e932d63bf994e7e85a126c1f3e76cbedacb9849ecc131c"
+        },
+        "expected.json": {
+          "path": "paused-mailbox-away/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Mailbox opens with 'hi', pauses, and resumes at 780 ms. First-party synthetic audio and scripted events.",
+      "seed": 10605,
+      "source_group": "mailbox-away",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "paused-mailbox-away-long-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "paused-mailbox-away-long-gap/audio.ulaw",
+          "sha256": "fefc731e463f880126206e2f0fbf90915b3e9dfb69f4ffbd4542af73573b8a2d"
+        },
+        "events.jsonl": {
+          "path": "paused-mailbox-away-long-gap/events.jsonl",
+          "sha256": "5ea1ab9f180c04334fe414558e2b56652f27d28b6f423c6cf67fae9743f7ae41"
+        },
+        "expected.json": {
+          "path": "paused-mailbox-away-long-gap/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Mailbox opens with 'hi', pauses, and resumes at 1820 ms. First-party synthetic audio and scripted events.",
+      "seed": 10605,
+      "source_group": "mailbox-away",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "paused-mailbox-later",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "paused-mailbox-later/audio.ulaw",
+          "sha256": "b94f19d2140d3ae28f21f3747442243c989576c6cdb6e29aecb54936e928577c"
+        },
+        "events.jsonl": {
+          "path": "paused-mailbox-later/events.jsonl",
+          "sha256": "7462c95c9e893500b5a68baa30f431fd6a58fcc78382a54b98ff5ac543298bcb"
+        },
+        "expected.json": {
+          "path": "paused-mailbox-later/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Mailbox opens with 'hey', pauses, and resumes at 620 ms. First-party synthetic audio and scripted events.",
+      "seed": 10606,
+      "source_group": "mailbox-later",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "paused-mailbox-later-long-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "paused-mailbox-later-long-gap/audio.ulaw",
+          "sha256": "3fe5fe19667371c633d709c34422bbbc4284a3d3213e33db35d565a567e5d732"
+        },
+        "events.jsonl": {
+          "path": "paused-mailbox-later-long-gap/events.jsonl",
+          "sha256": "c757595ee777c565f65c50893914bdb9a3052b211f75ca24996cc97b32ade577"
+        },
+        "expected.json": {
+          "path": "paused-mailbox-later-long-gap/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Mailbox opens with 'hey', pauses, and resumes at 2200 ms. First-party synthetic audio and scripted events.",
+      "seed": 10606,
+      "source_group": "mailbox-later",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "short-mailbox-note",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "short-mailbox-note/audio.ulaw",
+          "sha256": "64057055ac59acac985a57ed92653b9e2485d4e5ebcfd589516264ef87cc13d0"
+        },
+        "events.jsonl": {
+          "path": "short-mailbox-note/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "short-mailbox-note/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Brief mailbox greeting, 'leave a note' at 40 ms, then a recording tone. First-party synthetic audio and scripted events.",
+      "seed": 10603,
+      "source_group": "mailbox-note",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "short-mailbox-note-no-beep",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "short-mailbox-note-no-beep/audio.ulaw",
+          "sha256": "71ca8a504488b535b6e8796d84b567079d334f490ebb61c5a6a8b591c2ac38c8"
+        },
+        "events.jsonl": {
+          "path": "short-mailbox-note-no-beep/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "short-mailbox-note-no-beep/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Brief mailbox greeting, 'leave a note' at 300 ms, then silence. First-party synthetic audio and scripted events.",
+      "seed": 10603,
+      "source_group": "mailbox-note",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "short-mailbox-unavailable",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "short-mailbox-unavailable/audio.ulaw",
+          "sha256": "b569deeab3a52f6c75a397efe89dc73ffb349e83f39770cdfd585b329d9cd62c"
+        },
+        "events.jsonl": {
+          "path": "short-mailbox-unavailable/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "short-mailbox-unavailable/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Brief mailbox greeting, 'can't answer' at 0 ms, then a recording tone. First-party synthetic audio and scripted events.",
+      "seed": 10604,
+      "source_group": "mailbox-unavailable",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "short-mailbox-unavailable-no-beep",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "short-mailbox-unavailable-no-beep/audio.ulaw",
+          "sha256": "1df759038d617d3ada3736a20c2fdd3fafaf80cde2a48971f13b7c55c47e7e0f"
+        },
+        "events.jsonl": {
+          "path": "short-mailbox-unavailable-no-beep/events.jsonl",
+          "sha256": "21e58c96079b7887e32cf9e68d74d672072b26e0fdc294312e29a1110098f853"
+        },
+        "expected.json": {
+          "path": "short-mailbox-unavailable-no-beep/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Brief mailbox greeting, 'can't answer' at 620 ms, then silence. First-party synthetic audio and scripted events.",
+      "seed": 10604,
+      "source_group": "mailbox-unavailable",
+      "track": "acoustic"
+    },
+    {
+      "family": "screener-to-disconnect",
+      "id": "simulated-screener-caller-to-disconnect",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "simulated-screener-caller-to-disconnect/audio.ulaw",
+          "sha256": "e9c0434b2c28296d5a4baec788e6fd7bea5b13a94689bbf7ef54259c3148cb37"
+        },
+        "events.jsonl": {
+          "path": "simulated-screener-caller-to-disconnect/events.jsonl",
+          "sha256": "5bdba2a8afa55f0d760b3c6486b2ed5071cbdb15920cc96efd5b42356f316a24"
+        },
+        "expected.json": {
+          "path": "simulated-screener-caller-to-disconnect/expected.json",
+          "sha256": "fd97444dbffb0b6d40c403458a380401f7806b5db9b5f52605b44ddb2ccb98b5"
+        }
+      },
+      "policy_events": [
+        {
+          "at_ms": 80,
+          "event": "screener"
+        },
+        {
+          "at_ms": 1020,
+          "event": "prompt_end"
+        },
+        {
+          "at_ms": 2420,
+          "event": "disconnect"
+        }
+      ],
+      "provenance": "Simulated generic screener, 'who is calling', followed by disconnect. First-party synthetic audio and scripted events.",
+      "seed": 10611,
+      "simulated": true,
+      "source_group": "simulated-screener-caller",
+      "track": "policy"
+    },
+    {
+      "family": "screener-to-human",
+      "id": "simulated-screener-caller-to-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "simulated-screener-caller-to-human/audio.ulaw",
+          "sha256": "9aef3e23c0021d708a276484351aa7ce9fe15efad68391086f3709cf7eb8293f"
+        },
+        "events.jsonl": {
+          "path": "simulated-screener-caller-to-human/events.jsonl",
+          "sha256": "4f8990b6a68de1366353d9a7ea91cb6c8cd43522c6e1fe53c188b10822fc203c"
+        },
+        "expected.json": {
+          "path": "simulated-screener-caller-to-human/expected.json",
+          "sha256": "3f5e7e3322f68de608b753db12f5267c9a179c49de02f0912b8ef7cc446ab975"
+        }
+      },
+      "policy_events": [
+        {
+          "at_ms": 80,
+          "event": "screener"
+        },
+        {
+          "at_ms": 1020,
+          "event": "prompt_end"
+        },
+        {
+          "at_ms": 2420,
+          "event": "human_takeover"
+        }
+      ],
+      "provenance": "Simulated generic screener, 'who is calling', followed by human. First-party synthetic audio and scripted events.",
+      "seed": 10611,
+      "simulated": true,
+      "source_group": "simulated-screener-caller",
+      "track": "policy"
+    },
+    {
+      "family": "screener-to-mailbox",
+      "id": "simulated-screener-caller-to-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "simulated-screener-caller-to-mailbox/audio.ulaw",
+          "sha256": "0e0e5b1140a305c401735f577aa163c0c273eddffad48670e988a01de1cd71b0"
+        },
+        "events.jsonl": {
+          "path": "simulated-screener-caller-to-mailbox/events.jsonl",
+          "sha256": "4f8990b6a68de1366353d9a7ea91cb6c8cd43522c6e1fe53c188b10822fc203c"
+        },
+        "expected.json": {
+          "path": "simulated-screener-caller-to-mailbox/expected.json",
+          "sha256": "851544e50fd2fe892018527a44f32863afc23ffdd7431810065dbc5c697244e9"
+        }
+      },
+      "policy_events": [
+        {
+          "at_ms": 80,
+          "event": "screener"
+        },
+        {
+          "at_ms": 1020,
+          "event": "prompt_end"
+        },
+        {
+          "at_ms": 2420,
+          "event": "mailbox_ready"
+        }
+      ],
+      "provenance": "Simulated generic screener, 'who is calling', followed by mailbox. First-party synthetic audio and scripted events.",
+      "seed": 10611,
+      "simulated": true,
+      "source_group": "simulated-screener-caller",
+      "track": "policy"
+    },
+    {
+      "family": "screener-to-disconnect",
+      "id": "simulated-screener-name-to-disconnect",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "simulated-screener-name-to-disconnect/audio.ulaw",
+          "sha256": "bceeb3039ad1afa5ecc07cb1ee2943c8be93f415f7e2e033e83c9647712cad15"
+        },
+        "events.jsonl": {
+          "path": "simulated-screener-name-to-disconnect/events.jsonl",
+          "sha256": "3abb7205761490cfbfc9c7b2c032365a7abd21310332a55a9577f39dc7c182c9"
+        },
+        "expected.json": {
+          "path": "simulated-screener-name-to-disconnect/expected.json",
+          "sha256": "3da1f9c72f57922ddc4fb7a648bd8cc48bdfc2aafa6bdfa0f0a302d082e5415c"
+        }
+      },
+      "policy_events": [
+        {
+          "at_ms": 80,
+          "event": "screener"
+        },
+        {
+          "at_ms": 1180,
+          "event": "prompt_end"
+        },
+        {
+          "at_ms": 1980,
+          "event": "disconnect"
+        }
+      ],
+      "provenance": "Simulated generic screener, 'please say your name', followed by disconnect. First-party synthetic audio and scripted events.",
+      "seed": 10610,
+      "simulated": true,
+      "source_group": "simulated-screener-name",
+      "track": "policy"
+    },
+    {
+      "family": "screener-to-human",
+      "id": "simulated-screener-name-to-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "simulated-screener-name-to-human/audio.ulaw",
+          "sha256": "75374189f44a58e38e31a39fb6a6c7d86a7d027edc596e5191ab3e587fe77e09"
+        },
+        "events.jsonl": {
+          "path": "simulated-screener-name-to-human/events.jsonl",
+          "sha256": "65c733fbcd287a06c4afeabd954e1ea4f1fa49ac580fef4e22d7698d04884bff"
+        },
+        "expected.json": {
+          "path": "simulated-screener-name-to-human/expected.json",
+          "sha256": "3065ddea7fb910d7e2c5fac5aab12868fe8c247cd3cdb9f5b72309486ce2a75b"
+        }
+      },
+      "policy_events": [
+        {
+          "at_ms": 80,
+          "event": "screener"
+        },
+        {
+          "at_ms": 1180,
+          "event": "prompt_end"
+        },
+        {
+          "at_ms": 1980,
+          "event": "human_takeover"
+        }
+      ],
+      "provenance": "Simulated generic screener, 'please say your name', followed by human. First-party synthetic audio and scripted events.",
+      "seed": 10610,
+      "simulated": true,
+      "source_group": "simulated-screener-name",
+      "track": "policy"
+    },
+    {
+      "family": "screener-to-mailbox",
+      "id": "simulated-screener-name-to-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "simulated-screener-name-to-mailbox/audio.ulaw",
+          "sha256": "1e938a7f015ee4e6c815d707c02ba400be39955b6667f2cb862b041cdf302c0e"
+        },
+        "events.jsonl": {
+          "path": "simulated-screener-name-to-mailbox/events.jsonl",
+          "sha256": "65c733fbcd287a06c4afeabd954e1ea4f1fa49ac580fef4e22d7698d04884bff"
+        },
+        "expected.json": {
+          "path": "simulated-screener-name-to-mailbox/expected.json",
+          "sha256": "f994eedc8ad65d37494ac0e1816d97828811bf8b90db29d1e261e80628bfb32b"
+        }
+      },
+      "policy_events": [
+        {
+          "at_ms": 80,
+          "event": "screener"
+        },
+        {
+          "at_ms": 1180,
+          "event": "prompt_end"
+        },
+        {
+          "at_ms": 1980,
+          "event": "mailbox_ready"
+        }
+      ],
+      "provenance": "Simulated generic screener, 'please say your name', followed by mailbox. First-party synthetic audio and scripted events.",
+      "seed": 10610,
+      "simulated": true,
+      "source_group": "simulated-screener-name",
+      "track": "policy"
+    }
+  ],
+  "pack_version": 1,
+  "schema_version": 1
+}
