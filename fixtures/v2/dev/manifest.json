@@ -1,0 +1,486 @@
+{
+  "cases": [
+    {
+      "family": "long-human",
+      "id": "dev-long-human-clean",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-long-human-clean/audio.ulaw",
+          "sha256": "e0429b3cc4189c8a4854129a7bc4b3a6ff8c780397332e523456a801e54875df"
+        },
+        "events.jsonl": {
+          "path": "dev-long-human-clean/events.jsonl",
+          "sha256": "413afc16b1f48120c4760a64a0c4a24510b2ed88516e3ee44eb09af580566f87"
+        },
+        "expected.json": {
+          "path": "dev-long-human-clean/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hello yes i'm here go ahead who is calling?' at 100 ms. The human continues speaking across cutoff. First-party synthetic audio and scripted events.",
+      "seed": 21903,
+      "source_group": "dev-long-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "long-human",
+      "id": "dev-long-human-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-long-human-media-gap/audio.ulaw",
+          "sha256": "e0429b3cc4189c8a4854129a7bc4b3a6ff8c780397332e523456a801e54875df"
+        },
+        "events.jsonl": {
+          "path": "dev-long-human-media-gap/events.jsonl",
+          "sha256": "6cd36ecedb6163886ebe95c26ec6a9873933a4ba658ead01af36b73681302d32"
+        },
+        "expected.json": {
+          "path": "dev-long-human-media-gap/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hello yes i'm here go ahead who is calling?' at 100 ms. Drops media covering 760 to 920 ms of the greeting. First-party synthetic audio and scripted events.",
+      "seed": 21903,
+      "source_group": "dev-long-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "dev-matched-prefix-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-matched-prefix-human/audio.ulaw",
+          "sha256": "edcd2474d00a563eb84e80c6ae4716c893353f02bbb430cc132e376fe16b9da7"
+        },
+        "events.jsonl": {
+          "path": "dev-matched-prefix-human/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-matched-prefix-human/expected.json",
+          "sha256": "6b5dfae90ed2aa5a0f12387d3cfe043d673e04510fea4105640264f13f4265f7"
+        }
+      },
+      "provenance": "Synthetic opening 'hello?' at 160 ms. Both calls add 'yes?' at 640 ms and pause through cutoff. The human continuation 'i'm here go ahead' starts at 2180 ms. First-party synthetic audio and scripted events.",
+      "seed": 21906,
+      "source_group": "dev-matched-prefix",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "dev-matched-prefix-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-matched-prefix-mailbox/audio.ulaw",
+          "sha256": "41faeafc16f06620b6667e5b31a4d17f7fe9646fc7a2f466a81d231907a7da9a"
+        },
+        "events.jsonl": {
+          "path": "dev-matched-prefix-mailbox/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-matched-prefix-mailbox/expected.json",
+          "sha256": "bfbbf4aba970ecf794ca81ed2df741abd23e964cd377c38323296b85f71453d9"
+        }
+      },
+      "provenance": "Synthetic opening 'hello?' at 160 ms. Both calls add 'yes?' at 640 ms and pause through cutoff. The mailbox continuation 'i'm away leave a note' starts at 2180 ms. First-party synthetic audio and scripted events.",
+      "seed": 21906,
+      "source_group": "dev-matched-prefix",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "dev-paused-mailbox-after",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox-after/audio.ulaw",
+          "sha256": "c87eb6539d10ccecaaec8190a0a0b979113ecb2bb8c1d899d144b9629ac602d8"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox-after/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox-after/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hi' at 80 ms. After a pause, 'i'm away leave a note' starts at 2240 ms. First-party synthetic audio and scripted events.",
+      "seed": 21905,
+      "source_group": "dev-paused-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "dev-paused-mailbox-after-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox-after-media-gap/audio.ulaw",
+          "sha256": "c87eb6539d10ccecaaec8190a0a0b979113ecb2bb8c1d899d144b9629ac602d8"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox-after-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox-after-media-gap/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hi' at 80 ms. After a pause, 'i'm away leave a note' starts at 2240 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21905,
+      "source_group": "dev-paused-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "dev-paused-mailbox-before",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox-before/audio.ulaw",
+          "sha256": "747637f436eb23400acab54568817731ce24490130bcc7ae1591902fb0d59e25"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox-before/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox-before/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hi' at 80 ms. After a pause, 'i'm away leave a note' starts at 980 ms. First-party synthetic audio and scripted events.",
+      "seed": 21905,
+      "source_group": "dev-paused-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "dev-paused-mailbox-before-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox-before-media-gap/audio.ulaw",
+          "sha256": "747637f436eb23400acab54568817731ce24490130bcc7ae1591902fb0d59e25"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox-before-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox-before-media-gap/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hi' at 80 ms. After a pause, 'i'm away leave a note' starts at 980 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21905,
+      "source_group": "dev-paused-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "dev-paused-mailbox-near",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox-near/audio.ulaw",
+          "sha256": "88468eb815acdf77a694e650b8719236339af92b3697c9e4c7cd2fb4acb09700"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox-near/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox-near/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hi' at 80 ms. After a pause, 'i'm away leave a note' starts at 1980 ms. First-party synthetic audio and scripted events.",
+      "seed": 21905,
+      "source_group": "dev-paused-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "dev-paused-mailbox-near-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox-near-room-tone/audio.ulaw",
+          "sha256": "a171dff76fb1ea0ddaf751f232fc96f5b2142bbec34822d2fdd95f325a6dc321"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox-near-room-tone/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox-near-room-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hi' at 80 ms. After a pause, 'i'm away leave a note' starts at 1980 ms. Adds low-level room tone between speech bursts. First-party synthetic audio and scripted events.",
+      "seed": 21905,
+      "source_group": "dev-paused-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "dev-resumed-human-after",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-resumed-human-after/audio.ulaw",
+          "sha256": "a11fde6d23e3b8f3a0e011ec56976069b97290f39a4fe50192df43f59adff9ba"
+        },
+        "events.jsonl": {
+          "path": "dev-resumed-human-after/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-resumed-human-after/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'yes?' at 40 ms. After a pause, 'yes i'm here' starts at 2240 ms. First-party synthetic audio and scripted events.",
+      "seed": 21904,
+      "source_group": "dev-resumed-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "dev-resumed-human-after-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-resumed-human-after-media-gap/audio.ulaw",
+          "sha256": "a11fde6d23e3b8f3a0e011ec56976069b97290f39a4fe50192df43f59adff9ba"
+        },
+        "events.jsonl": {
+          "path": "dev-resumed-human-after-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "dev-resumed-human-after-media-gap/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'yes?' at 40 ms. After a pause, 'yes i'm here' starts at 2240 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21904,
+      "source_group": "dev-resumed-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "dev-resumed-human-before",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-resumed-human-before/audio.ulaw",
+          "sha256": "b811cee0e4ca492644b3bf68edfab7a6875c566d915ef7b7434b9128b57f0af1"
+        },
+        "events.jsonl": {
+          "path": "dev-resumed-human-before/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-resumed-human-before/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'yes?' at 40 ms. After a pause, 'yes i'm here' starts at 980 ms. First-party synthetic audio and scripted events.",
+      "seed": 21904,
+      "source_group": "dev-resumed-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "dev-resumed-human-before-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-resumed-human-before-media-gap/audio.ulaw",
+          "sha256": "b811cee0e4ca492644b3bf68edfab7a6875c566d915ef7b7434b9128b57f0af1"
+        },
+        "events.jsonl": {
+          "path": "dev-resumed-human-before-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "dev-resumed-human-before-media-gap/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'yes?' at 40 ms. After a pause, 'yes i'm here' starts at 980 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21904,
+      "source_group": "dev-resumed-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "dev-resumed-human-near",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-resumed-human-near/audio.ulaw",
+          "sha256": "9cf2811cd62a5c5c7c9a787a872ebf1aae4123ff1479a25902b463993c9f64a6"
+        },
+        "events.jsonl": {
+          "path": "dev-resumed-human-near/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-resumed-human-near/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'yes?' at 40 ms. After a pause, 'yes i'm here' starts at 1980 ms. First-party synthetic audio and scripted events.",
+      "seed": 21904,
+      "source_group": "dev-resumed-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "dev-resumed-human-near-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-resumed-human-near-room-tone/audio.ulaw",
+          "sha256": "76353b2394583f08738bd1f104d89d9b0918e8e9e2246a1d73df6307e8d060b2"
+        },
+        "events.jsonl": {
+          "path": "dev-resumed-human-near-room-tone/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "dev-resumed-human-near-room-tone/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'yes?' at 40 ms. After a pause, 'yes i'm here' starts at 1980 ms. Adds low-level room tone between speech bursts. First-party synthetic audio and scripted events.",
+      "seed": 21904,
+      "source_group": "dev-resumed-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-human",
+      "id": "dev-short-human-clean",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-short-human-clean/audio.ulaw",
+          "sha256": "863b6876f169ce6a6c3e70d429eca4df831e6c05892a5c26b5f596707d313b7d"
+        },
+        "events.jsonl": {
+          "path": "dev-short-human-clean/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "dev-short-human-clean/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Synthetic opening 'hello?' at 60 ms. The human waits after the short pickup. First-party synthetic audio and scripted events.",
+      "seed": 21901,
+      "source_group": "dev-short-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-human",
+      "id": "dev-short-human-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-short-human-room-tone/audio.ulaw",
+          "sha256": "a777f9874f2d6aa21cdaa6ea91b999980222476aca482303705ff0b18d2756a1"
+        },
+        "events.jsonl": {
+          "path": "dev-short-human-room-tone/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "dev-short-human-room-tone/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Synthetic opening 'hello?' at 60 ms. The human waits with low-level room tone. First-party synthetic audio and scripted events.",
+      "seed": 21901,
+      "source_group": "dev-short-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "dev-short-mailbox-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-short-mailbox-room-tone/audio.ulaw",
+          "sha256": "ed7437ea6031a2fe9cd3a3d3fc05fdbf484dae51a4252078a921218d63db0622"
+        },
+        "events.jsonl": {
+          "path": "dev-short-mailbox-room-tone/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "dev-short-mailbox-room-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'leave a note' at 100 ms. The short greeting ends in low-level room tone. First-party synthetic audio and scripted events.",
+      "seed": 21902,
+      "source_group": "dev-short-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "dev-short-mailbox-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-short-mailbox-tone/audio.ulaw",
+          "sha256": "5ae352a479ae5adbe856d4b168b62e27eeeb9087dd075a0c990ac24fb2b2b428"
+        },
+        "events.jsonl": {
+          "path": "dev-short-mailbox-tone/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "dev-short-mailbox-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'leave a note' at 100 ms. A recording tone starts at 1080 ms. First-party synthetic audio and scripted events.",
+      "seed": 21902,
+      "source_group": "dev-short-mailbox",
+      "split": "dev",
+      "track": "acoustic"
+    }
+  ],
+  "pack_version": 2,
+  "schema_version": 1
+}

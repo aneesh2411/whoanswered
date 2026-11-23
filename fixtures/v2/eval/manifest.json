@@ -1,0 +1,486 @@
+{
+  "cases": [
+    {
+      "family": "long-human",
+      "id": "eval-long-human-clean",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-long-human-clean/audio.ulaw",
+          "sha256": "8ebeb68e872ff0e1773dc1acb75fefc7f79eb9acf0bbef8fdfec93a33f1a50b8"
+        },
+        "events.jsonl": {
+          "path": "eval-long-human-clean/events.jsonl",
+          "sha256": "413afc16b1f48120c4760a64a0c4a24510b2ed88516e3ee44eb09af580566f87"
+        },
+        "expected.json": {
+          "path": "eval-long-human-clean/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi yes i'm here go ahead who is calling?' at 180 ms. The human continues speaking across cutoff. First-party synthetic audio and scripted events.",
+      "seed": 21913,
+      "source_group": "eval-long-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "long-human",
+      "id": "eval-long-human-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-long-human-media-gap/audio.ulaw",
+          "sha256": "8ebeb68e872ff0e1773dc1acb75fefc7f79eb9acf0bbef8fdfec93a33f1a50b8"
+        },
+        "events.jsonl": {
+          "path": "eval-long-human-media-gap/events.jsonl",
+          "sha256": "6cd36ecedb6163886ebe95c26ec6a9873933a4ba658ead01af36b73681302d32"
+        },
+        "expected.json": {
+          "path": "eval-long-human-media-gap/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi yes i'm here go ahead who is calling?' at 180 ms. Drops media covering 760 to 920 ms of the greeting. First-party synthetic audio and scripted events.",
+      "seed": 21913,
+      "source_group": "eval-long-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "eval-matched-prefix-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-matched-prefix-human/audio.ulaw",
+          "sha256": "6a552e8b029ea44f0fb1aeaea8b13e8eed3f09e026116ce68bef5a4f9ed21fcc"
+        },
+        "events.jsonl": {
+          "path": "eval-matched-prefix-human/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-matched-prefix-human/expected.json",
+          "sha256": "9e666e213f79ce318ad047f1cd13bd84ce4db366cbb589ab5eb63020381065f3"
+        }
+      },
+      "provenance": "Synthetic opening 'hey?' at 260 ms. Both calls add 'hello?' at 660 ms and pause through cutoff. The human continuation 'yes go ahead' starts at 2320 ms. First-party synthetic audio and scripted events.",
+      "seed": 21916,
+      "source_group": "eval-matched-prefix",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "eval-matched-prefix-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-matched-prefix-mailbox/audio.ulaw",
+          "sha256": "b278cd61aef7b76186ca703a42d977ade63ca49175e9d64948d861e686b45220"
+        },
+        "events.jsonl": {
+          "path": "eval-matched-prefix-mailbox/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-matched-prefix-mailbox/expected.json",
+          "sha256": "d75ace6b5e169fbd6898af5b0d4dd6add8681e10a25d899c1419fc40f3897520"
+        }
+      },
+      "provenance": "Synthetic opening 'hey?' at 260 ms. Both calls add 'hello?' at 660 ms and pause through cutoff. The mailbox continuation 'can't answer leave your note' starts at 2320 ms. First-party synthetic audio and scripted events.",
+      "seed": 21916,
+      "source_group": "eval-matched-prefix",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "eval-paused-mailbox-after",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-paused-mailbox-after/audio.ulaw",
+          "sha256": "c5ca1451ee9e66dafa1954f76e305de06a9c2e9bc1c391b294eea5347d4a540a"
+        },
+        "events.jsonl": {
+          "path": "eval-paused-mailbox-after/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-paused-mailbox-after/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hey' at 160 ms. After a pause, 'please call back later' starts at 2320 ms. First-party synthetic audio and scripted events.",
+      "seed": 21915,
+      "source_group": "eval-paused-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "eval-paused-mailbox-after-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-paused-mailbox-after-media-gap/audio.ulaw",
+          "sha256": "c5ca1451ee9e66dafa1954f76e305de06a9c2e9bc1c391b294eea5347d4a540a"
+        },
+        "events.jsonl": {
+          "path": "eval-paused-mailbox-after-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "eval-paused-mailbox-after-media-gap/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hey' at 160 ms. After a pause, 'please call back later' starts at 2320 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21915,
+      "source_group": "eval-paused-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "eval-paused-mailbox-before",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-paused-mailbox-before/audio.ulaw",
+          "sha256": "6717f43f4c22eca2fe1f2a4616fff0fca6c95051e46100dd68a480ee58770a53"
+        },
+        "events.jsonl": {
+          "path": "eval-paused-mailbox-before/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-paused-mailbox-before/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hey' at 160 ms. After a pause, 'please call back later' starts at 1140 ms. First-party synthetic audio and scripted events.",
+      "seed": 21915,
+      "source_group": "eval-paused-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "eval-paused-mailbox-before-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-paused-mailbox-before-media-gap/audio.ulaw",
+          "sha256": "6717f43f4c22eca2fe1f2a4616fff0fca6c95051e46100dd68a480ee58770a53"
+        },
+        "events.jsonl": {
+          "path": "eval-paused-mailbox-before-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "eval-paused-mailbox-before-media-gap/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hey' at 160 ms. After a pause, 'please call back later' starts at 1140 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21915,
+      "source_group": "eval-paused-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "eval-paused-mailbox-near",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-paused-mailbox-near/audio.ulaw",
+          "sha256": "6169468493d4e48b0bad7b6ffe3dc003ebda3738ed2cca807736b9507905f1b4"
+        },
+        "events.jsonl": {
+          "path": "eval-paused-mailbox-near/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-paused-mailbox-near/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hey' at 160 ms. After a pause, 'please call back later' starts at 1980 ms. First-party synthetic audio and scripted events.",
+      "seed": 21915,
+      "source_group": "eval-paused-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "paused-mailbox",
+      "id": "eval-paused-mailbox-near-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-paused-mailbox-near-room-tone/audio.ulaw",
+          "sha256": "f4b3539cf470c28d97846809f36656a6fbe20ab1a8befe8efc4dc1d1d47bf984"
+        },
+        "events.jsonl": {
+          "path": "eval-paused-mailbox-near-room-tone/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-paused-mailbox-near-room-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'hey' at 160 ms. After a pause, 'please call back later' starts at 1980 ms. Adds low-level room tone between speech bursts. First-party synthetic audio and scripted events.",
+      "seed": 21915,
+      "source_group": "eval-paused-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "eval-resumed-human-after",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-resumed-human-after/audio.ulaw",
+          "sha256": "d770dc3759ad99fb673ecfe30373c63455d15b1e8504c25cc1eabda2625779e5"
+        },
+        "events.jsonl": {
+          "path": "eval-resumed-human-after/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-resumed-human-after/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi?' at 140 ms. After a pause, 'go ahead who is calling?' starts at 2320 ms. First-party synthetic audio and scripted events.",
+      "seed": 21914,
+      "source_group": "eval-resumed-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "eval-resumed-human-after-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-resumed-human-after-media-gap/audio.ulaw",
+          "sha256": "d770dc3759ad99fb673ecfe30373c63455d15b1e8504c25cc1eabda2625779e5"
+        },
+        "events.jsonl": {
+          "path": "eval-resumed-human-after-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "eval-resumed-human-after-media-gap/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi?' at 140 ms. After a pause, 'go ahead who is calling?' starts at 2320 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21914,
+      "source_group": "eval-resumed-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "eval-resumed-human-before",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-resumed-human-before/audio.ulaw",
+          "sha256": "8c0a4e573354620a132defc5879bd61f4a27f0851a8147690f64235041b39335"
+        },
+        "events.jsonl": {
+          "path": "eval-resumed-human-before/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-resumed-human-before/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi?' at 140 ms. After a pause, 'go ahead who is calling?' starts at 1140 ms. First-party synthetic audio and scripted events.",
+      "seed": 21914,
+      "source_group": "eval-resumed-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "eval-resumed-human-before-media-gap",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-resumed-human-before-media-gap/audio.ulaw",
+          "sha256": "8c0a4e573354620a132defc5879bd61f4a27f0851a8147690f64235041b39335"
+        },
+        "events.jsonl": {
+          "path": "eval-resumed-human-before-media-gap/events.jsonl",
+          "sha256": "8142318030569bbb124bc1754b91b1f55b326bdc68c928de8734b9c778d2ec1c"
+        },
+        "expected.json": {
+          "path": "eval-resumed-human-before-media-gap/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi?' at 140 ms. After a pause, 'go ahead who is calling?' starts at 1140 ms. Drops media covering 600 to 800 ms of audio. First-party synthetic audio and scripted events.",
+      "seed": 21914,
+      "source_group": "eval-resumed-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "eval-resumed-human-near",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-resumed-human-near/audio.ulaw",
+          "sha256": "bb1c4d60018856681e7fedb45802268f99e932a8e286767e57af6d995d203262"
+        },
+        "events.jsonl": {
+          "path": "eval-resumed-human-near/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-resumed-human-near/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi?' at 140 ms. After a pause, 'go ahead who is calling?' starts at 1980 ms. First-party synthetic audio and scripted events.",
+      "seed": 21914,
+      "source_group": "eval-resumed-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "resumed-human",
+      "id": "eval-resumed-human-near-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-resumed-human-near-room-tone/audio.ulaw",
+          "sha256": "72ba5985a61ad25a3afa022d2d7f7309586fdb01ea59d292d1ff0c6c7e33dfbe"
+        },
+        "events.jsonl": {
+          "path": "eval-resumed-human-near-room-tone/events.jsonl",
+          "sha256": "e33d41c9e24ac0e97e65abc22088eb00ef2b758ffc22fe5f2eda16134452eaa5"
+        },
+        "expected.json": {
+          "path": "eval-resumed-human-near-room-tone/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Synthetic opening 'hi?' at 140 ms. After a pause, 'go ahead who is calling?' starts at 1980 ms. Adds low-level room tone between speech bursts. First-party synthetic audio and scripted events.",
+      "seed": 21914,
+      "source_group": "eval-resumed-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-human",
+      "id": "eval-short-human-clean",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-short-human-clean/audio.ulaw",
+          "sha256": "b75624919e8b8651656baae1cefdd9a59988d79871747388d0a36661a12d2da1"
+        },
+        "events.jsonl": {
+          "path": "eval-short-human-clean/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "eval-short-human-clean/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Synthetic opening 'hey?' at 180 ms. The human waits after the short pickup. First-party synthetic audio and scripted events.",
+      "seed": 21911,
+      "source_group": "eval-short-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-human",
+      "id": "eval-short-human-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-short-human-room-tone/audio.ulaw",
+          "sha256": "c616a31f794ef95edb06f98692b1d29204264a61aaa0ef297e17dd54a73e23cf"
+        },
+        "events.jsonl": {
+          "path": "eval-short-human-room-tone/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "eval-short-human-room-tone/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Synthetic opening 'hey?' at 180 ms. The human waits with low-level room tone. First-party synthetic audio and scripted events.",
+      "seed": 21911,
+      "source_group": "eval-short-human",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "eval-short-mailbox-room-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-short-mailbox-room-tone/audio.ulaw",
+          "sha256": "8df7c5291aa68b286befbec466ad432ca05f11164ff0f6d7ad9d8c8b3ff4f619"
+        },
+        "events.jsonl": {
+          "path": "eval-short-mailbox-room-tone/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "eval-short-mailbox-room-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'can't answer' at 60 ms. The short greeting ends in low-level room tone. First-party synthetic audio and scripted events.",
+      "seed": 21912,
+      "source_group": "eval-short-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    },
+    {
+      "family": "short-mailbox",
+      "id": "eval-short-mailbox-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "eval-short-mailbox-tone/audio.ulaw",
+          "sha256": "ce7eb2575e7c0fbeb0aa92d1a8d85d86b00ef4a807e65b7e818cb15f05e50807"
+        },
+        "events.jsonl": {
+          "path": "eval-short-mailbox-tone/events.jsonl",
+          "sha256": "6fd68a0e8f8b291c7beba7dcd7d3ac2e192dd541431d8f6d1b82d7636860d4ac"
+        },
+        "expected.json": {
+          "path": "eval-short-mailbox-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Synthetic opening 'can't answer' at 60 ms. A recording tone starts at 1080 ms. First-party synthetic audio and scripted events.",
+      "seed": 21912,
+      "source_group": "eval-short-mailbox",
+      "split": "eval",
+      "track": "acoustic"
+    }
+  ],
+  "pack_version": 2,
+  "schema_version": 1
+}
