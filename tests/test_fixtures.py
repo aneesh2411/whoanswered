@@ -8,8 +8,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from whoanswered.fixtures import FixtureValidationError, canonical_json, canonical_jsonl, load_pack
-from whoanswered.replay import replay
+from whoanswered.fixtures import (
+    FRAME_BYTES, FixtureValidationError, canonical_json, canonical_jsonl, load_pack,
+)
+from whoanswered.replay import Observation, replay
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,16 +77,136 @@ class FixtureTest(unittest.TestCase):
         self.assertFalse(hasattr(changed.observable, "case_id"))
 
     def test_manifest_versions(self) -> None:
-        for field, code in (
-            ("schema_version", "UNSUPPORTED_SCHEMA_VERSION"),
-            ("pack_version", "UNSUPPORTED_PACK_VERSION"),
+        for field, invalid_version, code in (
+            ("schema_version", 2, "UNSUPPORTED_SCHEMA_VERSION"),
+            ("pack_version", 3, "UNSUPPORTED_PACK_VERSION"),
         ):
-            for invalid in (2, True, "1", None):
+            for invalid in (invalid_version, True, "1", None):
                 with self.subTest(field=field, invalid=invalid):
                     self.manifest[field] = invalid
                     self.write_manifest()
                     self.assert_invalid(code)
             self.manifest[field] = 1
+
+    def add_eval_case(self) -> dict:
+        self.manifest["pack_version"] = 2
+        self.case["split"] = "dev"
+        second = copy.deepcopy(self.case)
+        second.update(id="smoke-b", source_group="another-source", split="eval")
+        self.manifest["cases"].append(second)
+        self.write_manifest()
+        return second
+
+    def test_both_pack_revisions_validate_and_silence_can_be_shared(self) -> None:
+        (original,) = load_pack(self.pack)
+        self.assertIsNone(original.split)
+        second = self.add_eval_case()
+        self.write_payload("audio.ulaw", b"\x7f" * (2 * FRAME_BYTES), case=second, directory="eval")
+        dev, evaluation = load_pack(self.pack)
+        self.assertEqual((dev.split, evaluation.split), ("dev", "eval"))
+        self.assertEqual(dev.observable, original.observable)
+        self.assertEqual(dev.expected, original.expected)
+
+    def test_revision_two_requires_a_known_split(self) -> None:
+        self.manifest["pack_version"] = 2
+        self.write_manifest()
+        self.assert_invalid("INVALID_SPLIT")
+        for invalid in (None, True, [], "", "Eval", "reserved"):
+            with self.subTest(split=invalid):
+                self.case["split"] = invalid
+                self.write_manifest()
+                self.assert_invalid("INVALID_SPLIT")
+
+    def test_source_group_cannot_cross_splits(self) -> None:
+        second = self.add_eval_case()
+        second["source_group"] = self.case["source_group"]
+        self.write_manifest()
+        self.assert_invalid("SPLIT_SOURCE_GROUP")
+        second["split"] = "dev"
+        self.write_manifest()
+        self.assertEqual(len(load_pack(self.pack)), 2)
+
+    def test_matched_pair_cannot_cross_splits_even_with_different_sources(self) -> None:
+        second = self.add_eval_case()
+        expected = json.loads((self.pack / "expected.json").read_bytes())
+        expected["matched_pair"] = "pair-1"
+        self.write_payload("expected.json", canonical_json(expected))
+        self.write_payload("expected.json", canonical_json(expected), case=second, directory="eval")
+        self.assert_invalid("SPLIT_MATCHED_PAIR")
+        second["split"] = "dev"
+        self.write_manifest()
+        self.assertEqual(len(load_pack(self.pack)), 2)
+
+    def test_copied_audio_opening_cannot_cross_splits_with_different_tails(self) -> None:
+        second = self.add_eval_case()
+        opening = b"\x80\x81" * (FRAME_BYTES // 2)
+        self.write_payload("audio.ulaw", opening + b"\x82" * FRAME_BYTES)
+        self.write_payload(
+            "audio.ulaw", b"\x7f" * FRAME_BYTES + opening + b"\x83" * FRAME_BYTES,
+            case=second, directory="eval",
+        )
+        self.assert_invalid("SPLIT_AUDIO_PREFIX")
+        second["split"] = "dev"
+        self.write_manifest()
+        self.assertEqual(len(load_pack(self.pack)), 2)
+
+    def test_copied_delivered_opening_cannot_cross_splits(self) -> None:
+        second = self.add_eval_case()
+        opening = b"\x80\x81" * (FRAME_BYTES // 2)
+        self.write_payload("audio.ulaw", opening + b"\xff" * FRAME_BYTES)
+        self.write_payload(
+            "audio.ulaw", b"\x83" * FRAME_BYTES + opening, case=second, directory="eval"
+        )
+        self.write_payload(
+            "events.jsonl", canonical_jsonl(self.events[:2] + [self.events[3]]),
+            case=second, directory="eval",
+        )
+        self.assert_invalid("SPLIT_AUDIO_PREFIX")
+
+    def test_cli_validates_joint_boundary_for_separate_packs(self) -> None:
+        second = self.add_eval_case()
+        dev, evaluation = self.temp / "dev", self.temp / "eval"
+        for pack, entry in ((dev, self.case), (evaluation, second)):
+            shutil.copytree(self.pack, pack)
+            (pack / "manifest.json").write_bytes(canonical_json({**self.manifest, "cases": [entry]}))
+
+        command = [sys.executable, "-m", "whoanswered", "validate", "--pack", str(dev)]
+        joint = [*command, "--pack", str(evaluation)]
+        subprocess.run(joint, cwd=ROOT, check=True)
+
+        second["source_group"] = self.case["source_group"]
+        (evaluation / "manifest.json").write_bytes(canonical_json({**self.manifest, "cases": [second]}))
+        subprocess.run([*command[:-1], str(evaluation)], cwd=ROOT, check=True)
+        result = subprocess.run(joint, cwd=ROOT, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stdout, b"")
+        self.assertEqual(
+            result.stderr, f"whoanswered: SPLIT_SOURCE_GROUP: {self.case['source_group']}\n".encode()
+        )
+
+    def test_revision_two_metadata_and_expected_outcomes_stay_outside_detector_input(self) -> None:
+        second = self.add_eval_case()
+        second.update(track="policy", provenance="second source notes", license="MIT-0")
+        second["policy_events"] = [{"event": "screener", "at_ms": 500}]
+        self.write_payload("expected.json", canonical_json({
+            "answerer": "voicemail", "matched_pair": None, "verdict": "voicemail",
+            "actions": [{"action": "play_voicemail", "at_ms": 2500}],
+        }), case=second, directory="eval")
+        streams = []
+
+        def factory():
+            observations = []
+            streams.append(observations)
+            return observations.append
+
+        replay(self.pack, self.temp / "out", detector_factory=factory)
+        dev, evaluation = streams
+        self.assertTrue(dev)
+        self.assertTrue(all(type(observation) is Observation for observation in dev))
+        self.assertEqual(dev, evaluation)
+        self.assertEqual(
+            set(Observation.__slots__), {"event", "at_ms", "sequence", "sample_start_ms", "audio"}
+        )
 
     def test_duplicate_and_unsorted_case_ids(self) -> None:
         second = copy.deepcopy(self.case)

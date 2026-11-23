@@ -5,7 +5,7 @@ from pathlib import Path
 
 from .baseline import AudioBaseline
 from .bundle import bundle
-from .fixtures import FixtureValidationError, load_pack
+from .fixtures import FixtureValidationError, load_pack, validate_split_boundary
 from .replay import replay
 
 
@@ -15,8 +15,11 @@ DETECTOR_FACTORIES = {"v1": AudioBaseline}
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m whoanswered")
     commands = parser.add_subparsers(dest="command", required=True)
-    validate_parser = commands.add_parser("validate", help="Validate a local fixture pack")
-    validate_parser.add_argument("--pack", required=True, type=Path, help="Fixture directory")
+    validate_parser = commands.add_parser("validate", help="Validate local fixture packs")
+    validate_parser.add_argument(
+        "--pack", required=True, action="append", type=Path,
+        help="Fixture directory (repeat to check a shared dev/eval boundary)",
+    )
     replay_parser = commands.add_parser("replay", help="Replay a local fixture pack")
     replay_parser.add_argument("--pack", required=True, type=Path, help="Fixture directory")
     replay_parser.add_argument("--out", required=True, type=Path, help="Output directory")
@@ -28,7 +31,9 @@ def main() -> None:
 
     try:
         if args.command == "validate":
-            load_pack(args.pack)
+            packs = [load_pack(pack) for pack in args.pack]
+            if len(packs) > 1:
+                validate_split_boundary(case for pack in packs for case in pack)
         elif args.command == "replay":
             factory = DETECTOR_FACTORIES.get(args.detector)
             if factory is None:

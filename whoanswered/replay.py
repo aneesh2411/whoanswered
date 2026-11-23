@@ -7,18 +7,17 @@ from pathlib import Path
 
 from .baseline import AudioBaseline, DetectorUpdate
 from .fixtures import (
+    CUTOFF_MS,
     FRAME_MS,
     FixtureCase,
     ObservableInput,
     canonical_json,
     canonical_jsonl,
+    frame_ends_by_cutoff,
     load_pack,
 )
 from .policy import InMemoryPlaybackSink, PlaybackAction, PolicyEvent, run_policy
 from .scorecard import build_scorecard
-
-
-CUTOFF_MS = 2_000
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,7 +101,7 @@ def _observations(observable: ObservableInput) -> Iterator[Observation]:
             sample_start_ms = event.frame_index * FRAME_MS
             # A frame is indivisible. At or before the cutoff, discard frames
             # that claim to contain samples from beyond the decision window.
-            if at_ms <= CUTOFF_MS and sample_start_ms + FRAME_MS > CUTOFF_MS:
+            if at_ms <= CUTOFF_MS and not frame_ends_by_cutoff(event.frame_index):
                 continue
             audio = observable.frame(event.frame_index)
         yield Observation(event.event, at_ms, event.sequence, sample_start_ms, audio)
