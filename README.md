@@ -110,7 +110,13 @@ python -m unittest discover -s tests
 
 ## Compare bundled detectors
 
+The `veto` detector applies v1's short-greeting rule at 2,000 ms. It commits to
+`human` when a short greeting is followed by a qualifying pause with complete
+media through the cutoff. Resumed speech and missing frames cause abstentions.
+The cutoff observation in the replay trace records the decision and its reason.
+
 ```sh
+python -m whoanswered replay --pack fixtures/v2/dev --detector veto --out build/veto
 python -m whoanswered compare --pack fixtures/v2/eval --out build/compare
 python -m unittest tests.test_comparison
 ```
@@ -120,7 +126,7 @@ each bundled detector's coverage, errors in both directions, correct
 commitments, abstentions, and median commitment time through 2,000 ms. The
 report has separate sections for matched-prefix and scripted policy checks.
 Each candidate's promotion result applies both checks and the revision 2
-metric rules. The bundled registry currently contains the `v1` reference.
+metric rules.
 [Revision 2 evaluation rules](docs/fixture-format.md#revision-2-evaluation-rules)
 
 ## License

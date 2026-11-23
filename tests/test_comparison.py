@@ -249,3 +249,5 @@ class ComparisonTest(unittest.TestCase):
         self.assertEqual(report["acoustic"]["v1"]["committed_coverage"], rate(10, 18))
         self.assertEqual(report["acoustic"]["v1"]["committed_error"], rate(4, 10))
         self.assertTrue(report["matched_prefix_assertions"]["v1"][0]["passed"])
+        self.assertEqual(set(report["acoustic"]), {"v1", "veto"})
+        self.assertTrue(report["matched_prefix_assertions"]["veto"][0]["passed"])
