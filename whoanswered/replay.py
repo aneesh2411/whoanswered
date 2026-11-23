@@ -5,6 +5,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
+from .baseline import AudioBaseline, DetectorUpdate
 from .fixtures import FRAME_MS, ObservableInput, canonical_json, load_pack
 
 
@@ -22,12 +23,8 @@ class Observation:
     audio: bytes | None = None
 
 
-# Return a verdict to commit, or None to keep listening.
-Detector = Callable[[Observation], str | None]
-
-
-def _abstain(_: Observation) -> None:
-    return None
+# A detector may return a verdict, a trace reason with an optional verdict, or None.
+Detector = Callable[[Observation], str | DetectorUpdate | None]
 
 
 def replay(
@@ -35,10 +32,10 @@ def replay(
 ) -> None:
     """Replay a validated pack with a fresh detector for each case."""
     cases = load_pack(pack)
+    factory = AudioBaseline if detector_factory is None else detector_factory
     for case in cases:
         case_out = out if len(cases) == 1 else out / case.case_id
-        detector = _abstain if detector_factory is None else detector_factory()
-        _replay_case(case.observable, case_out, detector)
+        _replay_case(case.observable, case_out, factory())
 
 
 def _observations(observable: ObservableInput) -> Iterator[Observation]:
@@ -71,7 +68,11 @@ def _replay_case(observable: ObservableInput, out: Path, detector: Detector) -> 
     result = None
     trace = []
     for observation in _observations(observable):
-        verdict = detector(observation)
+        update = detector(observation)
+        if isinstance(update, DetectorUpdate):
+            verdict, reason = update.verdict, update.reason
+        else:
+            verdict, reason = update, None
         if result is None:
             if first_verdict is None:
                 first_verdict = verdict
@@ -88,6 +89,8 @@ def _replay_case(observable: ObservableInput, out: Path, detector: Detector) -> 
         if observation.audio is not None:
             entry["sample_start_ms"] = observation.sample_start_ms
             entry["sha256"] = hashlib.sha256(observation.audio).hexdigest()
+        if reason is not None:
+            entry["reason"] = reason
         if verdict is not None:
             entry["verdict"] = verdict
         trace.append(entry)
