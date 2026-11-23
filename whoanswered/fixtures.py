@@ -349,7 +349,7 @@ def validate_split_boundary(cases: Iterable[FixtureCase]) -> None:
                     raise FixtureValidationError("SPLIT_AUDIO_PREFIX", location)
 
 
-def load_pack(pack: Path) -> tuple[FixtureCase, ...]:
+def load_pack(pack: Path, *, dev_only: bool = False) -> tuple[FixtureCase, ...]:
     """Validate the whole pack and return cases in manifest order."""
     try:
         root = pack.resolve()
@@ -380,6 +380,12 @@ def load_pack(pack: Path) -> tuple[FixtureCase, ...]:
         case_ids.append(case_id)
     if case_ids != sorted(case_ids):
         raise FixtureValidationError("CASES_UNSORTED", "manifest.json")
+
+    # Tuning must reject mixed or eval packs before opening any case payload.
+    if dev_only and (
+        manifest["pack_version"] != 2 or any(entry.get("split") != "dev" for entry in entries)
+    ):
+        raise FixtureValidationError("DEV_SPLIT_REQUIRED", "manifest.json")
 
     cases = tuple(_read_case(root, entry, manifest["pack_version"]) for entry in entries)
     pair_counts = Counter(

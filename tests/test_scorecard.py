@@ -207,5 +207,7 @@ class ScorecardTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 2)
         self.assertEqual(result.stdout, b"")
-        self.assertEqual(result.stderr, b"whoanswered: unknown detector 'unknown' (choose from v1, veto)\n")
+        self.assertEqual(
+            result.stderr, b"whoanswered: unknown detector 'unknown' (choose from v1, veto, score)\n",
+        )
         self.assertFalse(self.out.exists())

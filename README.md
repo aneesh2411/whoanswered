@@ -108,6 +108,11 @@ python -m unittest discover -s tests
 
 [Case matrix, generation, and license](fixtures/v2/README.md)
 
+Run development selection with
+`python -m whoanswered tune --pack fixtures/v2/dev --out build/tune`.
+It writes `build/tune/selection.json` and requires a dev-only revision 2 pack.
+[Development results and frozen operating point](docs/v2-dev-results.md)
+
 ## Compare bundled detectors
 
 The `veto` detector applies v1's short-greeting rule at 2,000 ms. It commits to

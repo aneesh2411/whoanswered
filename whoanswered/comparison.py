@@ -1,11 +1,11 @@
 """Compare bundled detectors on the frozen revision 2 evaluation cases."""
 
 from collections import Counter
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
 from statistics import median
 
-from .fixtures import CUTOFF_MS, FixtureValidationError, canonical_json, load_pack
+from .fixtures import CUTOFF_MS, FixtureCase, FixtureValidationError, canonical_json, load_pack
 from .policy import run_policy
 from .replay import CaseReplay, Detector, PolicyRunner, replay_case, replay_policy
 from .scorecard import matched_prefix_assertions, metric_rate, policy_assertions
@@ -14,7 +14,15 @@ from .scorecard import matched_prefix_assertions, metric_rate, policy_assertions
 ANSWERERS = ("human", "voicemail")
 
 
-def _acoustic_metrics(results: list[CaseReplay]) -> dict:
+def eligible_acoustic_cases(cases: Iterable[FixtureCase]) -> list[FixtureCase]:
+    return [
+        case for case in cases
+        if case.track == "acoustic" and case.expected.matched_pair is None
+        and case.expected.answerer in ANSWERERS
+    ]
+
+
+def acoustic_metrics(results: list[CaseReplay]) -> dict:
     commitments = [result for result in results if result.commitment_ms is not None]
     correct = sum(result.initial_verdict == result.case.expected.answerer for result in commitments)
     directions = Counter((result.case.expected.answerer, result.initial_verdict) for result in results)
@@ -68,11 +76,7 @@ def compare(
     cases = [case for case in load_pack(pack) if case.split == "eval"]
     if not cases:
         raise FixtureValidationError("MISSING_EVAL_SPLIT", "manifest.json")
-    eligible = [
-        case for case in cases
-        if case.track == "acoustic" and case.expected.matched_pair is None
-        and case.expected.answerer in ANSWERERS
-    ]
+    eligible = eligible_acoustic_cases(cases)
     matched = [case for case in cases if case.expected.matched_pair is not None]
     policy = policy_assertions(
         (case, replay_policy(case, policy_runner)) for case in cases if case.track == "policy"
@@ -81,7 +85,7 @@ def compare(
     acoustic = {}
     prefixes = {}
     for name, factory in detector_factories.items():
-        acoustic[name] = _acoustic_metrics([
+        acoustic[name] = acoustic_metrics([
             replay_case(case, factory(), cutoff_only=True) for case in eligible
         ])
         prefixes[name] = matched_prefix_assertions(
