@@ -8,10 +8,12 @@ from .bundle import bundle
 from .comparison import compare
 from .fixtures import FixtureValidationError, load_pack, validate_split_boundary
 from .replay import replay
-from .veto import CutoffVeto
+from .selection import tune
+from .veto import CutoffVeto, EvidenceScore
 
 
 DETECTOR_FACTORIES = {"v1": AudioBaseline, "veto": CutoffVeto}
+REPLAY_FACTORIES = {**DETECTOR_FACTORIES, "score": EvidenceScore}
 
 
 def main() -> None:
@@ -29,6 +31,9 @@ def main() -> None:
     compare_parser = commands.add_parser("compare", help="Compare bundled detectors on reserved evaluation cases")
     compare_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 fixture directory")
     compare_parser.add_argument("--out", required=True, type=Path, help="Output directory")
+    tune_parser = commands.add_parser("tune", help="Select the operating point on development cases")
+    tune_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 dev-only fixture directory")
+    tune_parser.add_argument("--out", required=True, type=Path, help="Output directory")
     bundle_parser = commands.add_parser("bundle", help="Build the public v1 reviewer ZIP")
     bundle_parser.add_argument("--pack", required=True, type=Path, help="Public v1 fixture directory")
     bundle_parser.add_argument("--out", required=True, type=Path, help="Output ZIP file")
@@ -40,13 +45,15 @@ def main() -> None:
             if len(packs) > 1:
                 validate_split_boundary(case for pack in packs for case in pack)
         elif args.command == "replay":
-            factory = DETECTOR_FACTORIES.get(args.detector)
+            factory = REPLAY_FACTORIES.get(args.detector)
             if factory is None:
-                available = ", ".join(DETECTOR_FACTORIES)
+                available = ", ".join(REPLAY_FACTORIES)
                 parser.exit(2, f"whoanswered: unknown detector {args.detector!r} (choose from {available})\n")
             replay(args.pack, args.out, detector_factory=factory)
         elif args.command == "compare":
             compare(args.pack, args.out, detector_factories=DETECTOR_FACTORIES)
+        elif args.command == "tune":
+            tune(args.pack, args.out)
         else:
             bundle(args.pack, args.out)
     except FixtureValidationError as error:
