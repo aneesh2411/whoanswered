@@ -1,0 +1,111 @@
+{
+  "cases": [
+    {
+      "id": "ambiguous-greeting",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "ambiguous-greeting/audio.ulaw",
+          "sha256": "14a2ffef4f155c8e60aad8dbeff7adcda01330886fd8c9c1143adb03bf636947"
+        },
+        "events.jsonl": {
+          "path": "ambiguous-greeting/events.jsonl",
+          "sha256": "c81711087a15e044ce88a662c0b0317a8bdefab40da6b3cf44df0cf3dd0d6c39"
+        },
+        "expected.json": {
+          "path": "ambiguous-greeting/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Locally generated G.711 mu-law audio with 28 signal frames and 5 digital silence frames. Events are scripted.",
+      "source_group": "synthetic-energy",
+      "track": "acoustic"
+    },
+    {
+      "id": "clear-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "clear-human/audio.ulaw",
+          "sha256": "c8125996bbce08cae43c3036f4a33ccf1a6dce609525e74080160d61ffad52c0"
+        },
+        "events.jsonl": {
+          "path": "clear-human/events.jsonl",
+          "sha256": "0fc29dbd76d40f1020b8284b2940c159be22a629a799a55914e17114bc795609"
+        },
+        "expected.json": {
+          "path": "clear-human/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Locally generated G.711 mu-law audio with 6 signal frames and 24 digital silence frames. Events are scripted.",
+      "source_group": "synthetic-energy",
+      "track": "acoustic"
+    },
+    {
+      "id": "clear-voicemail",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "clear-voicemail/audio.ulaw",
+          "sha256": "2c435fbaee5c0ef8eff8be7a38903b51c54554fdfbee41c9ee0b75e15e7ab8d9"
+        },
+        "events.jsonl": {
+          "path": "clear-voicemail/events.jsonl",
+          "sha256": "efee83ac4da137efffa733ef52c6fd9ff524201a8cda1ca4cd8a9d7f34302354"
+        },
+        "expected.json": {
+          "path": "clear-voicemail/expected.json",
+          "sha256": "a5dc588e0a4ca80b6f83ffb4eb094607b089e5a2381bda52585f6652799cbfa9"
+        }
+      },
+      "provenance": "Locally generated G.711 mu-law audio with 50 signal frames and 0 digital silence frames. Events are scripted.",
+      "source_group": "synthetic-energy",
+      "track": "acoustic"
+    },
+    {
+      "id": "confirmed-disconnect",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "confirmed-disconnect/audio.ulaw",
+          "sha256": "0052516839b94ee314a4e3b398c8036de3790d672194987a394ee60323848539"
+        },
+        "events.jsonl": {
+          "path": "confirmed-disconnect/events.jsonl",
+          "sha256": "0e5403f1aed92e2d18aeb79d44b4fd2197cd7c82ca4839b971909a0694f2deae"
+        },
+        "expected.json": {
+          "path": "confirmed-disconnect/expected.json",
+          "sha256": "664bf795628632aa1be69c28f7163cac28943ca06c78af9c04f91c74255659ee"
+        }
+      },
+      "provenance": "Locally generated G.711 mu-law audio with 0 signal frames and 1 digital silence frames. Events are scripted.",
+      "source_group": "synthetic-transport",
+      "track": "acoustic"
+    },
+    {
+      "id": "missing-media",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "missing-media/audio.ulaw",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events.jsonl": {
+          "path": "missing-media/events.jsonl",
+          "sha256": "f43efa135c734a1ec576d45f01e2b88ee82a8e6dfc097bb240aa4fb7f349d0aa"
+        },
+        "expected.json": {
+          "path": "missing-media/expected.json",
+          "sha256": "dff351f3e620be2dbccf3185e4fe0c66b87a618117f15e4d0eaa1fcf0c2f485b"
+        }
+      },
+      "provenance": "Scripted call with an empty G.711 mu-law payload.",
+      "source_group": "synthetic-transport",
+      "track": "acoustic"
+    }
+  ],
+  "pack_version": 1,
+  "schema_version": 1
+}

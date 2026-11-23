@@ -12,6 +12,7 @@
   {
     "at_ms": 20,
     "event": "media",
+    "reason": "connected_silence",
     "sample_start_ms": 0,
     "sequence": 3,
     "sha256": "0052516839b94ee314a4e3b398c8036de3790d672194987a394ee60323848539"
@@ -19,6 +20,7 @@
   {
     "at_ms": 40,
     "event": "media",
+    "reason": "connected_silence",
     "sample_start_ms": 20,
     "sequence": 4,
     "sha256": "0052516839b94ee314a4e3b398c8036de3790d672194987a394ee60323848539"
@@ -26,10 +28,13 @@
   {
     "at_ms": 40,
     "event": "stop",
+    "reason": "stream_loss",
     "sequence": 5
   },
   {
     "at_ms": 2000,
-    "event": "cutoff"
+    "event": "cutoff",
+    "reason": "stream_loss",
+    "verdict": "uncertain"
   }
 ]

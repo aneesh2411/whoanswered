@@ -1,0 +1,6 @@
+{"arrival_ms":0,"event":"call_answered","sequence":1}
+{"arrival_ms":0,"event":"connected","sequence":2}
+{"arrival_ms":0,"event":"start","sequence":3}
+{"arrival_ms":20,"event":"media","media":{"frame_index":0},"sequence":4}
+{"arrival_ms":40,"event":"stop","sequence":5}
+{"arrival_ms":60,"event":"call_completed","sequence":6}
