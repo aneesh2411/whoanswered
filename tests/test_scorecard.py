@@ -14,6 +14,7 @@ from whoanswered.replay import replay
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "fixtures" / "v1"
 EXPECTED = ROOT / "tests" / "expected" / "v1"
+REPLAY_ARGS = (sys.executable, "-m", "whoanswered", "replay", "--pack", "fixtures/v1")
 
 
 class ScorecardTest(unittest.TestCase):
@@ -81,6 +82,23 @@ class ScorecardTest(unittest.TestCase):
                     {"action": "reply_identity_and_purpose", "at_ms": 1020},
                     {"action": action, "at_ms": 2420},
                 ])
+
+    def test_v1_paused_mailbox_false_human_commitment_timing(self):
+        subprocess.run([*REPLAY_ARGS, "--out", self.out, "--detector", "v1"], cwd=ROOT, check=True)
+        traces = self.read_traces()
+        for case_id in (
+            "paused-mailbox-away", "paused-mailbox-away-long-gap", "paused-mailbox-later-long-gap",
+        ):
+            with self.subTest(case_id=case_id):
+                trace = traces[case_id]
+                verdicts = [
+                    (observation["at_ms"], observation["verdict"], observation["reason"])
+                    for observation in trace["observations"] if "verdict" in observation
+                ]
+                self.assertEqual(verdicts, [(740, "human", "short_greeting_then_pause")])
+                self.assertEqual(trace["initial_decision"], {
+                    "at_ms": 2000, "decision": "human", "provisional": True,
+                })
 
     def test_forced_guess_fails_matched_prefix_assertion(self):
         def guess(observation):
@@ -164,9 +182,14 @@ class ScorecardTest(unittest.TestCase):
         ])
 
     def test_cli_reproduces_golden_bytes_across_directories_and_hash_seeds(self):
-        for out, seed in ((self.out, "1"), (self.temp / "other", "867"), (self.out, "3")):
+        for out, seed, detector_args in (
+            (self.out, "1", ()),
+            (self.temp / "other", "867", ()),
+            (self.out, "3", ("--detector", "v1")),
+            (self.temp / "other", "71", ("--detector", "v1")),
+        ):
             subprocess.run(
-                [sys.executable, "-m", "whoanswered", "replay", "--pack", "fixtures/v1", "--out", out],
+                [*REPLAY_ARGS, "--out", out, *detector_args],
                 cwd=ROOT,
                 env={**os.environ, "PYTHONHASHSEED": seed},
                 check=True,
@@ -174,3 +197,15 @@ class ScorecardTest(unittest.TestCase):
             for filename in ("scorecard.json", "traces.jsonl"):
                 with self.subTest(seed=seed, filename=filename):
                     self.assertEqual((out / filename).read_bytes(), (EXPECTED / filename).read_bytes())
+
+    def test_cli_rejects_unknown_detector(self):
+        result = subprocess.run(
+            [*REPLAY_ARGS, "--out", self.out, "--detector", "unknown"],
+            cwd=ROOT,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.stdout, b"")
+        self.assertEqual(result.stderr, b"whoanswered: unknown detector 'unknown' (choose from v1)\n")
+        self.assertFalse(self.out.exists())
