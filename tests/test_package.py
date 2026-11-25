@@ -37,6 +37,7 @@ class PackageTest(unittest.TestCase):
             self.assertEqual(metadata["License-Expression"], "MIT")
             self.assertIsNone(metadata.get_all("Requires-Dist"))
             self.assertIn("whoanswered/py.typed", names)
+            self.assertIn("whoanswered/transcript_cues.json", names)
             self.assertFalse(any(name.startswith("fixtures/") for name in names))
 
         env = temp / "venv"

@@ -22,4 +22,4 @@ Documentation = "https://github.com/aneesh2411/whoanswered/blob/main/docs/api.md
 packages = ["whoanswered"]
 
 [tool.setuptools.package-data]
-whoanswered = ["py.typed"]
+whoanswered = ["py.typed", "transcript_cues.json"]

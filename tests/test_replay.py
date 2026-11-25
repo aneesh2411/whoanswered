@@ -36,8 +36,10 @@ class RecordingDetector:
         self.test.assertIs(type(observation), Observation)
         record = asdict(observation)
         self.test.assertEqual(
-            set(record), {"event", "at_ms", "sequence", "sample_start_ms", "audio"}
+            set(record), {"event", "at_ms", "sequence", "sample_start_ms", "audio", "text", "final"}
         )
+        self.test.assertIsNone(observation.text)
+        self.test.assertIs(observation.final, False)
         if observation.event == "media":
             self.test.assertIs(type(observation.audio), bytes)
             self.test.assertEqual(len(observation.audio), FRAME_BYTES)

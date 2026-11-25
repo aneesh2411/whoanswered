@@ -1,0 +1,22 @@
+{
+  "voicemail": [
+    "after the tone",
+    "at the beep",
+    "leave a message",
+    "leave your message",
+    "not available",
+    "voice mailbox"
+  ],
+  "screener": [
+    "record your name",
+    "state your name and reason for calling",
+    "this call is being screened"
+  ],
+  "greetings": ["hello", "hey", "hi", "yes"],
+  "human_question_openers": [
+    "are you", "can i", "can you", "how can", "how may", "is it", "is this",
+    "may i", "what", "where", "who", "why"
+  ],
+  "human_name_openers": ["i am", "i'm", "this is"],
+  "human_name_exclusions": ["bye", "hello", "hey", "hi", "no", "okay", "thanks", "there", "yes"]
+}

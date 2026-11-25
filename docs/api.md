@@ -38,8 +38,12 @@ print(result.label)
 | `Detector.start()` | Returns an independent `DetectorSession` with an uncertain decision. |
 | `DetectorSession.feed_audio(frame, *, t_ms, encoding="mulaw8k")` | Feeds raw audio and returns a decision update or `None`. |
 | `DetectorSession.feed_event(name, *, t_ms)` | Feeds a call event and returns a decision update or `None`. |
+| `DetectorSession.feed_transcript(text, *, t_ms, final)` | Optionally consumes a transcript update at its answer-relative arrival time and returns a decision update or `None`. The default ignores it. |
 | `DetectorSession.decision()` | Returns the current `Decision`. Its label is `uncertain` until commitment. After commitment, the same decision is final for the session. |
 | `V1Detector()` | Uses the frozen v1 audio baseline. It commits to `human` or `voicemail` when its greeting rules match and otherwise remains `uncertain`. |
+| `TranscriptCueDetector()` | Looks for phrase cues in finalized transcript updates. |
+| `ToneDetector()` | Looks for a steady beep after speech in 160-byte G.711 mu-law frames. |
+| `FusionDetector(audio=None, transcript=None, tone=None)` | Defaults to v1 audio and the bundled transcript and tone detectors. Send `cutoff` after all inputs available at the decision deadline. |
 | `evaluate(detector, pack_path)` | Starts a session for each case and returns the benchmark scorecard as a dictionary. |
 | `replay_pack(detector, pack_path, out)` | Returns the same scorecard and writes the canonical scorecard, traces, and per-case files to `out`. |
 
@@ -61,12 +65,19 @@ events in replay order, including `cutoff` after all inputs at 2,000 ms. The
 built-in V1 adapter also uses the recorded media sample offsets to reproduce
 the frozen replay across delayed or reordered frames.
 
+V3 replay calls `feed_transcript` when a session provides it. Send that method
+the transcript's arrival time and set `final=True` for a finalized update.
+The v3 benchmark transcripts and audio are authored synthetic signals. Real
+ASR output and real phone audio are untested.
+[Signal rules](v3-signals.md)
+
 ## Loading a detector plugin
 
-Pass a bundled detector name (`v1`, `veto`, or `score`) or `module:attribute`
+Pass a bundled detector name (`v1`, `veto`, `score`, `transcript`, `tone`, or `fusion`) or `module:attribute`
 to `--detector` on either `replay` or `compare`. The attribute must be an
 importable zero-argument factory that returns a `Detector`. Its `start()`
-method must create a fresh session implementing the three session methods.
+method must create a fresh session with `feed_audio`, `feed_event`, and
+`decision`. `feed_transcript` is optional for existing plugins.
 Pass names from code you trust, since Python imports and executes the module.
 Make the module available on the Python import path. From the checkout root,
 run the [example plugin](../examples/always_uncertain.py) with these commands.
@@ -77,12 +88,13 @@ python -m whoanswered compare --pack fixtures/v2/eval --out build/plugin-compare
 ```
 
 `compare` includes the v1 reference alongside the selected detector. Without
-`--detector`, it compares all three bundled detectors as usual. A bad detector
+`--detector`, the v2 report compares `v1`, `veto`, and `score`. The v3 report compares
+`v1`, `transcript`, `tone`, and `fusion`. A bad detector
 spec exits with status 2 and a `whoanswered: ` message on stderr.
 
 | Problem | Message after the prefix |
 | --- | --- |
-| Unknown bundled name | `unknown detector '<name>' (choose from v1, veto, score)` |
+| Unknown bundled name | `unknown detector '<name>' (choose from v1, veto, score, transcript, tone, fusion)` |
 | Malformed plugin spec | `invalid detector spec '<spec>' (expected module:attribute)` |
 | Import failed | `cannot import detector module '<module>': <error>` |
 | Missing or non-callable attribute | `detector factory '<spec>' is missing or not callable` |

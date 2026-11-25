@@ -79,7 +79,7 @@ class FixtureTest(unittest.TestCase):
     def test_manifest_versions(self) -> None:
         for field, invalid_version, code in (
             ("schema_version", 2, "UNSUPPORTED_SCHEMA_VERSION"),
-            ("pack_version", 3, "UNSUPPORTED_PACK_VERSION"),
+            ("pack_version", 4, "UNSUPPORTED_PACK_VERSION"),
         ):
             for invalid in (invalid_version, True, "1", None):
                 with self.subTest(field=field, invalid=invalid):
@@ -205,7 +205,7 @@ class FixtureTest(unittest.TestCase):
         self.assertTrue(all(type(observation) is Observation for observation in dev))
         self.assertEqual(dev, evaluation)
         self.assertEqual(
-            set(Observation.__slots__), {"event", "at_ms", "sequence", "sample_start_ms", "audio"}
+            set(Observation.__slots__), {"event", "at_ms", "sequence", "sample_start_ms", "audio", "text", "final"}
         )
 
     def test_duplicate_and_unsorted_case_ids(self) -> None:

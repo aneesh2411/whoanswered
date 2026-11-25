@@ -6,9 +6,9 @@ Install from GitHub with Python 3.12 or later.
 pip install git+https://github.com/aneesh2411/whoanswered
 ```
 
-The bundled detectors were tuned only on authored synthetic audio. All audio
-in the benchmark and examples is authored synthetic audio. Real phone audio
-is untested.
+The bundled detectors were tuned on authored synthetic audio and, for v3,
+authored synthetic transcripts. Real ASR output and real phone audio are
+untested.
 
 ## Start a session when the call is answered
 

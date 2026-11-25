@@ -31,6 +31,8 @@ class Observation:
     sequence: int | None = None
     sample_start_ms: int | None = None
     audio: bytes | None = None
+    text: str | None = None
+    final: bool = False
 
 
 type Detector = Callable[[Observation], str | DetectorUpdate | Decision | None]
@@ -81,9 +83,20 @@ def _streaming_replay(detector: StreamingDetector) -> Detector:
     if isinstance(session, _V1Session):
         return session._observe
 
+    feed_audio_at = getattr(session, "_feed_audio_at", None)
+    feed_transcript = getattr(session, "feed_transcript", None)
+
     def observe(observation: Observation) -> Decision | None:
         if observation.audio is not None:
+            if feed_audio_at is not None:
+                return feed_audio_at(
+                    observation.audio, t_ms=observation.at_ms, sample_start_ms=observation.sample_start_ms,
+                )
             return session.feed_audio(observation.audio, t_ms=observation.at_ms)
+        if observation.text is not None:
+            if feed_transcript is not None:
+                return feed_transcript(observation.text, t_ms=observation.at_ms, final=observation.final)
+            return None
         update = session.feed_event(observation.event, t_ms=observation.at_ms)
         if observation.event == "cutoff" and update is None:
             return session.decision()
@@ -148,7 +161,7 @@ def _observations(observable: ObservableInput) -> Iterator[Observation]:
             if at_ms <= CUTOFF_MS and not frame_ends_by_cutoff(event.frame_index):
                 continue
             audio = observable.frame(event.frame_index)
-        yield Observation(event.event, at_ms, event.sequence, sample_start_ms, audio)
+        yield Observation(event.event, at_ms, event.sequence, sample_start_ms, audio, event.text, event.final)
 
     if not cutoff_sent:
         yield Observation("cutoff", CUTOFF_MS)
@@ -183,6 +196,9 @@ def replay_case(case: FixtureCase, detector: Detector, *, cutoff_only: bool = Fa
         if observation.audio is not None:
             entry["sample_start_ms"] = observation.sample_start_ms
             entry["sha256"] = hashlib.sha256(observation.audio).hexdigest()
+        if observation.text is not None:
+            entry["text"] = observation.text
+            entry["final"] = observation.final
         if reason is not None:
             entry["reason"] = reason
         if verdict is not None:

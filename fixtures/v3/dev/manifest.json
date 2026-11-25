@@ -1,0 +1,486 @@
+{
+  "cases": [
+    {
+      "family": "matched-prefix",
+      "id": "dev-ambiguous-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-ambiguous-human/audio.ulaw",
+          "sha256": "e5cd656b63227d5e8665fe347f5e9ef0cb8ce556d43025760d65df758c948e14"
+        },
+        "events.jsonl": {
+          "path": "dev-ambiguous-human/events.jsonl",
+          "sha256": "824168a0a7dcc8e4c346bfb917927047d382eb8ffcb66a828c092d458fc04098"
+        },
+        "expected.json": {
+          "path": "dev-ambiguous-human/expected.json",
+          "sha256": "a421267c31db62a835cd1839b04dc5542d7782a1414a3b02a7b5303518b2f5b2"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34000,
+      "source_group": "dev-ambiguous",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "dev-ambiguous-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-ambiguous-mailbox/audio.ulaw",
+          "sha256": "d66e089dea5e0900f1af9466122a0c402be70d3ed8f39680bf84cdc8e0a39d17"
+        },
+        "events.jsonl": {
+          "path": "dev-ambiguous-mailbox/events.jsonl",
+          "sha256": "516212463425f83e6701f743ab67f9be29eb48785090f15a0371ad31c9e5b204"
+        },
+        "expected.json": {
+          "path": "dev-ambiguous-mailbox/expected.json",
+          "sha256": "00d2a33b3500d84dc297643de2e4fbacc13b48be62ec90f3bb5ea6ccf6d1b688"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34000,
+      "source_group": "dev-ambiguous",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "agreement",
+      "id": "dev-human-at-cutoff",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-at-cutoff/audio.ulaw",
+          "sha256": "619ef1686aadb564fba7e7e0f00f557135608cc7d4b7cefb3175afb93874b34f"
+        },
+        "events.jsonl": {
+          "path": "dev-human-at-cutoff/events.jsonl",
+          "sha256": "ce4dade28a3908dac0c630f1ba29ea67db4239d6fb858991e771118195b4ef0e"
+        },
+        "expected.json": {
+          "path": "dev-human-at-cutoff/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34001,
+      "source_group": "dev-human-at-cutoff",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "transcript-noise",
+      "id": "dev-human-bad-final",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-bad-final/audio.ulaw",
+          "sha256": "35bac55373f864d5d411d06d2c31986d52947813e350d34239b20c6c3a78bebc"
+        },
+        "events.jsonl": {
+          "path": "dev-human-bad-final/events.jsonl",
+          "sha256": "4fe14ddb75f0ce1613949f20c878cb17b670b4c9b00038d0bfce60bd3c4b74c2"
+        },
+        "expected.json": {
+          "path": "dev-human-bad-final/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34002,
+      "source_group": "dev-human-bad-final",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "tone-control",
+      "id": "dev-human-brief-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-brief-tone/audio.ulaw",
+          "sha256": "8cbe2696a0fecb0b07d6dfb5ae5dcbd4722e2aa9537859aaf9df191815d5beb2"
+        },
+        "events.jsonl": {
+          "path": "dev-human-brief-tone/events.jsonl",
+          "sha256": "3c5368a05506b1fcb2a2f8901527675605ea8ae835f655c378e2bbe0ac9dae13"
+        },
+        "expected.json": {
+          "path": "dev-human-brief-tone/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34003,
+      "source_group": "dev-human-brief-tone",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "transcript-noise",
+      "id": "dev-human-corrected-partial",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-corrected-partial/audio.ulaw",
+          "sha256": "315a2cd350e5255eacba2d42ff65eb2cf62dcdbe079430d1f8f4f48d7078df5f"
+        },
+        "events.jsonl": {
+          "path": "dev-human-corrected-partial/events.jsonl",
+          "sha256": "d548cbf44adbb7cc9aede866ce2a6eac5d1646b9e960aafdd9fb48db85258dc1"
+        },
+        "expected.json": {
+          "path": "dev-human-corrected-partial/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34004,
+      "source_group": "dev-human-corrected-partial",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "transcript-noise",
+      "id": "dev-human-empty",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-empty/audio.ulaw",
+          "sha256": "31a331e920c6baf94369c75dc643faa11caba77ecd8e04b5fafa6c9217c364a6"
+        },
+        "events.jsonl": {
+          "path": "dev-human-empty/events.jsonl",
+          "sha256": "2febf36ad18c98e311ddb419cd3779ff3a284f7030b543bf99c53bed44c7e4cd"
+        },
+        "expected.json": {
+          "path": "dev-human-empty/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34005,
+      "source_group": "dev-human-empty",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "disagreement",
+      "id": "dev-human-long",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-long/audio.ulaw",
+          "sha256": "3e87d60fad555e90f348ad504affc75cf5f99f9173afde31061a2e3e5ff1a2e2"
+        },
+        "events.jsonl": {
+          "path": "dev-human-long/events.jsonl",
+          "sha256": "ba395aa317e45c04e9ebc8090eba0e7a9ffd168bc403c2482286422f01733627"
+        },
+        "expected.json": {
+          "path": "dev-human-long/expected.json",
+          "sha256": "ba25cfb666db7aa78bdd319b5938c27ed27b5b60ab7edd761cb04b891a25cb3b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34006,
+      "source_group": "dev-human-long",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "agreement",
+      "id": "dev-human-name",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-name/audio.ulaw",
+          "sha256": "05362744413e0a9ff7ce5db90f31bb770d15794a61f3a73fb8a2827b628181f7"
+        },
+        "events.jsonl": {
+          "path": "dev-human-name/events.jsonl",
+          "sha256": "2d5cc01c3c53c83cd2f0f6f4549cf3559d4e4dd266e48293403528361681e3ca"
+        },
+        "expected.json": {
+          "path": "dev-human-name/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34007,
+      "source_group": "dev-human-name",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "agreement",
+      "id": "dev-human-question",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-human-question/audio.ulaw",
+          "sha256": "067f0518b2b91dab59b6e349dd5615f1441a899ef3eb71ba942704f9854f3719"
+        },
+        "events.jsonl": {
+          "path": "dev-human-question/events.jsonl",
+          "sha256": "2f3bf173b10128ba2796dd3930815a96bed5163b96a06e34d602f3dffb6072ba"
+        },
+        "expected.json": {
+          "path": "dev-human-question/expected.json",
+          "sha256": "4977a67e6f57db461fc00ac76988b7b599bfaaba4ecda2e35a8f6477d3512e4b"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34008,
+      "source_group": "dev-human-question",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "beep",
+      "id": "dev-mailbox-beep",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-beep/audio.ulaw",
+          "sha256": "da697dfe1c26d0caf017569aa51acc19f93796baf89277be8183c9dbdb621d5a"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-beep/events.jsonl",
+          "sha256": "995b5dc81b4bb489f1c55dc705df2358da4ae06b2d9c567e81c6f7df2f9675f0"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-beep/expected.json",
+          "sha256": "a5dc588e0a4ca80b6f83ffb4eb094607b089e5a2381bda52585f6652799cbfa9"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34009,
+      "source_group": "dev-mailbox-beep",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "beep",
+      "id": "dev-mailbox-beep-only",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-beep-only/audio.ulaw",
+          "sha256": "5207c3fbb9c1e2787fbe02e2bf66534d8c61b4c6d2e4001b8d82cc95e378bb71"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-beep-only/events.jsonl",
+          "sha256": "e97c1af8d5f4e90d02c6c0cc42834700b0e3aa37c622e63081ffec435857997c"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-beep-only/expected.json",
+          "sha256": "a5dc588e0a4ca80b6f83ffb4eb094607b089e5a2381bda52585f6652799cbfa9"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34010,
+      "source_group": "dev-mailbox-beep-only",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "late-signal",
+      "id": "dev-mailbox-late-final",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-late-final/audio.ulaw",
+          "sha256": "552da9838483424eee2ef959666d8699b2244ac47d4ced8e2b94c2784d4ba1d5"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-late-final/events.jsonl",
+          "sha256": "d569112c74db484086330e9908df4d682e050d975b5cf10acefc9da88dba0f12"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-late-final/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34011,
+      "source_group": "dev-mailbox-late-final",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "late-signal",
+      "id": "dev-mailbox-late-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-late-tone/audio.ulaw",
+          "sha256": "f6a56642dec7ec5f19c090603727637a544b4535523404f61afa9d033a76de22"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-late-tone/events.jsonl",
+          "sha256": "7d9a9810c81774f7c3651e50ceb7bee717f79080923de8b8df83fdd78f01d36b"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-late-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34012,
+      "source_group": "dev-mailbox-late-tone",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "disagreement",
+      "id": "dev-mailbox-short-no-tone",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-short-no-tone/audio.ulaw",
+          "sha256": "5a0203378b08b3717e6b4fdbcabab0120f1a9571e8ac25384be46c72183adaa5"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-short-no-tone/events.jsonl",
+          "sha256": "21e6ec7d6a705e88e9ac15bfd919f24d77faec5bb15caeb9eb4c11124bb6477b"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-short-no-tone/expected.json",
+          "sha256": "175afd9d0b0706706efb7610053cfd4baa974d252fd9862d575726d250a260ce"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34013,
+      "source_group": "dev-mailbox-short-no-tone",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "agreement",
+      "id": "dev-mailbox-wording",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-wording/audio.ulaw",
+          "sha256": "5f6662536ec8206b2d51b2682b2e133b638bbf40f28b118046f3cb09785b3f3d"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-wording/events.jsonl",
+          "sha256": "c982f3d0607bd743e328d68ef4c6a4bfab5a552cfd17ddb5be0759aff93f3417"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-wording/expected.json",
+          "sha256": "a5dc588e0a4ca80b6f83ffb4eb094607b089e5a2381bda52585f6652799cbfa9"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34014,
+      "source_group": "dev-mailbox-wording",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "disagreement",
+      "id": "dev-mailbox-wrong-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-mailbox-wrong-human/audio.ulaw",
+          "sha256": "4ba6bbf0fc83d1c1b1d08ebe7401655e3a47716077af218f4d650656b53250ec"
+        },
+        "events.jsonl": {
+          "path": "dev-mailbox-wrong-human/events.jsonl",
+          "sha256": "35cbed76d7b355cf01f504f31909cfb73f7228b181826e875fe61a2cd756c486"
+        },
+        "expected.json": {
+          "path": "dev-mailbox-wrong-human/expected.json",
+          "sha256": "a5dc588e0a4ca80b6f83ffb4eb094607b089e5a2381bda52585f6652799cbfa9"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34015,
+      "source_group": "dev-mailbox-wrong-human",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "dev-paused-human",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-human/audio.ulaw",
+          "sha256": "e28ba85121294f0aec2363a712f16af112bf63d3ffda4f5606ad82cd82b5bc45"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-human/events.jsonl",
+          "sha256": "126672bb97c82a89fa3f7f9a2b606a9fceb2f1bf8fdf7953f7c5bcd7579e3ecc"
+        },
+        "expected.json": {
+          "path": "dev-paused-human/expected.json",
+          "sha256": "36345966073fff113fc17c50392426d2d198972932cf129c3d493ec03887a327"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34016,
+      "source_group": "dev-paused",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "matched-prefix",
+      "id": "dev-paused-mailbox",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-paused-mailbox/audio.ulaw",
+          "sha256": "fa925d611c1f3fcdc593b6a0872fac1e7a5568dc0057a6a0e8db14c2dae1418c"
+        },
+        "events.jsonl": {
+          "path": "dev-paused-mailbox/events.jsonl",
+          "sha256": "56051d322030fbf7d8a85b77156579299be8dcd7cfcdd3f3337f4f233a00304e"
+        },
+        "expected.json": {
+          "path": "dev-paused-mailbox/expected.json",
+          "sha256": "da1a535131ee2d60b7267d5d04e75c470c5161d78ef8232e7a79af45f47498a7"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34016,
+      "source_group": "dev-paused",
+      "split": "dev",
+      "track": "acoustic"
+    },
+    {
+      "family": "screener",
+      "id": "dev-screener",
+      "license": "MIT",
+      "payloads": {
+        "audio.ulaw": {
+          "path": "dev-screener/audio.ulaw",
+          "sha256": "8d535a72551d7563be05bd5cc5e6e15916da258028042d5e3b4596f7644b8e28"
+        },
+        "events.jsonl": {
+          "path": "dev-screener/events.jsonl",
+          "sha256": "06c4b55a176e59c2f85d94f3cde41053b80763036c3a688113823e18abbb5584"
+        },
+        "expected.json": {
+          "path": "dev-screener/expected.json",
+          "sha256": "c795f094e784132fa6d1ebaa647235ce0b6f9aaa9406a8d9efd0c2d46e38e9c6"
+        }
+      },
+      "provenance": "Authored synthetic audio and transcript with scripted arrival times.",
+      "seed": 34017,
+      "source_group": "dev-screener",
+      "split": "dev",
+      "track": "acoustic"
+    }
+  ],
+  "pack_version": 3,
+  "schema_version": 1
+}
