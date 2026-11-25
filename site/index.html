@@ -8,103 +8,266 @@
   <meta property="og:title" content="WhoAnswered | Two-Second Decision Challenge">
   <meta property="og:description" content="Explore the Two-Second Decision Challenge and compare its detectors on the reserved synthetic evaluation pack.">
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="wordmark" href="#top">WhoAnswered</a>
       <nav aria-label="On this page">
+        <a href="#how-it-works">How it works</a>
         <a href="#results">Results</a>
         <a href="#quickstart">Quickstart</a>
       </nav>
+      <a class="github-button" href="https://github.com/aneesh2411/whoanswered">GitHub</a>
     </div>
   </header>
 
-  <main id="top">
-    <div class="hero">
+  <main id="top" tabindex="-1">
+    <section class="hero" aria-labelledby="hero-title">
       <div class="wrap">
-        <h1>Who picked up?</h1>
-        <p>WhoAnswered is the Two-Second Decision Challenge, an open benchmark for the first two seconds of an outbound call.</p>
+        <p class="eyebrow">The Two-Second Decision Challenge</p>
+        <h1 id="hero-title">Who <span>picked up?</span></h1>
+        <p class="hero-summary">An open benchmark for the first two seconds of an outbound call.</p>
+        <div class="hero-actions">
+          <a class="button" href="#results">Explore results</a>
+          <a class="text-link" href="#quickstart">Run the benchmark</a>
+        </div>
+
+        <figure class="timeline">
+          <figcaption class="timeline-caption">
+            <span>Call timeline</span>
+            <span>Illustrative signals</span>
+          </figcaption>
+          <div class="timeline-body">
+            <div class="timeline-axis"><span>Answer</span><span>2,000 ms cutoff</span></div>
+            <ul class="timeline-lanes" role="list">
+              <li class="lane lane-human">
+                <span>Human</span>
+                <svg viewBox="0 0 480 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M0 20H23l5-4 4 7 5-13 5 22 5-29 5 33 5-24 5 14 5-8 6 3 5-1h20l5-5 5 12 5-17 5 19 5-12 5 5 5-2h347" />
+                </svg>
+              </li>
+              <li class="lane lane-voicemail">
+                <span>Voicemail</span>
+                <svg viewBox="0 0 480 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M0 20h40l5-4 5 9 5-17 5 22 5-17 5 13 5-8 6 2h22l5-7 5 16 5-21 5 16 5-10 5 12 5-6h24l5-5 5 11 5-17 5 20 5-15 5 11 5-5h17l6-8 5 17 5-23 5 25 5-15 5 8 5-4h25l5-6 5 14 5-19 5 22 5-16 5 9 5-4h34l5-5 5 10 5-13 5 17 5-13 5 8 5-4h101" />
+                </svg>
+              </li>
+              <li class="lane lane-screener">
+                <span>Screener</span>
+                <svg viewBox="0 0 480 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M0 20h67l5-5 5 10 5-15 5 20 5-20 5 15 5-10 5 5h29l5-5 5 10 5-15 5 20 5-20 5 15 5-10 5 5h29l5-5 5 10 5-15 5 20 5-20 5 15 5-10 5 5h29l5-5 5 10 5-15 5 20 5-20 5 15 5-10 5 5h166" />
+                </svg>
+              </li>
+              <li class="lane lane-silence">
+                <span>Silence</span>
+                <svg viewBox="0 0 480 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M0 20h480" />
+                </svg>
+              </li>
+              <li class="lane lane-uncertain">
+                <span>Uncertain</span>
+                <svg viewBox="0 0 480 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M0 20h23l5-4 4 7 5-13 5 22 5-29 5 33 5-24 5 14 5-8 6 3 5-1h20l5-5 5 12 5-17 5 19 5-12 5 5 5-2" />
+                  <path class="uncertain-tail" d="M133 20h347" />
+                </svg>
+              </li>
+            </ul>
+          </div>
+        </figure>
       </div>
-    </div>
+    </section>
 
-    <div class="wrap">
-      <div class="overview">
-        <section>
-          <h2>The problem</h2>
-          <p>When an outbound call connects, the agent has to decide whether it reached a human, voicemail, a screener, or silence. An opening “hello” can sound identical for a human and voicemail. When the evidence is ambiguous, the agent can say it is uncertain.</p>
-        </section>
-
-        <section>
-          <h2>How it works</h2>
-          <p>A benchmark pack supplies authored audio and scripted call events. Replay feeds the same observations to deterministic detectors. Candidate settings are calibrated on the development split to decide when to commit or abstain.</p>
-          <p>Scoring treats <code>uncertain</code> as a valid abstention and tracks committed coverage and errors among commitments separately.</p>
-        </section>
+    <section class="section dark problem" aria-labelledby="problem-title">
+      <div class="wrap problem-grid" data-reveal>
+        <div class="section-heading">
+          <p class="eyebrow">The problem</p>
+          <h2 id="problem-title">The same hello.<br>Two possible answers.</h2>
+          <p>A person and a voicemail greeting can sound identical through the cutoff. When the available evidence can’t tell them apart, the agent can say it’s uncertain.</p>
+        </div>
+        <figure class="matched-prefix">
+          <figcaption>Matched human and voicemail opening</figcaption>
+          <div class="shared-greeting">“Hello.”</div>
+          <ul class="possible-answers" role="list">
+            <li>Human</li>
+            <li>Voicemail</li>
+          </ul>
+        </figure>
       </div>
+    </section>
 
-      <section id="results" class="content-section">
-        <h2>Results</h2>
-        <table id="eval-results">
-          <caption>Acoustic results on the reserved v2 eval split</caption>
-          <thead>
-            <tr>
-              <th scope="col">Detector</th>
-              <th scope="col">Committed</th>
-              <th scope="col">Correct</th>
-              <th scope="col">Wrong</th>
-              <th scope="col">Median time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">v1</th>
-              <td>10/18</td>
-              <td>6</td>
-              <td>4</td>
-              <td>900 ms</td>
-            </tr>
-            <tr>
-              <th scope="row">Veto</th>
-              <td>6/18</td>
-              <td>3</td>
-              <td>3</td>
-              <td>2,000 ms</td>
-            </tr>
-            <tr>
-              <th scope="row">Evidence score</th>
-              <td>6/18</td>
-              <td>3</td>
-              <td>3</td>
-              <td>2,000 ms</td>
-            </tr>
-          </tbody>
-        </table>
-        <p>Committed counts decisions out of all eligible cases. Median time is measured among commitments. <a href="https://github.com/aneesh2411/whoanswered/blob/main/docs/v2-eval-comparison.json">Published evaluation report</a></p>
-      </section>
+    <section id="how-it-works" class="section how" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">How it works</p>
+          <h2 id="how-title">From audio to verdict.</h2>
+        </div>
+        <ol class="steps" role="list" data-reveal>
+          <li>
+            <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+              <path d="M4 13v6m6-10v14m6-19v24m6-17v10m6-8v6" />
+            </svg>
+            <h3>Replay the call</h3>
+            <p>Feed each detector the same authored audio and scripted call events.</p>
+          </li>
+          <li>
+            <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+              <circle cx="16" cy="16" r="12" />
+              <path d="M16 9v7l4 3" />
+            </svg>
+            <h3>Commit or abstain</h3>
+            <p>Use the evidence available by 2,000&nbsp;ms. Return <code>uncertain</code> when the evidence falls short.</p>
+          </li>
+          <li>
+            <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+              <path d="M5 5v22h22M11 21v-4m7 4V9m7 12V5" />
+            </svg>
+            <h3>Score the decisions</h3>
+            <p>Measure how often each detector commits, how often it’s wrong, and when it decides.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-      <section class="limits">
-        <h2>Honest limits</h2>
-        <p>All audio is authored synthetic audio. Real phone audio is untested.</p>
-      </section>
+    <section id="results" class="section dark results" aria-labelledby="results-title">
+      <div class="wrap">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Results</p>
+          <h2 id="results-title">The detector comparison.</h2>
+          <p>On the reserved v2 evaluation split, both candidates committed less often than v1. The benchmark keeps v1 as its reference.</p>
+        </div>
+        <div class="stat-grid" data-reveal>
+          <article class="stat-card reference" data-detector="v1">
+            <h3>v1 <span>Reference</span></h3>
+            <dl class="coverage">
+              <dt>Committed</dt>
+              <dd data-metric="coverage">10<span>/18</span></dd>
+            </dl>
+            <dl class="metrics">
+              <div><dt>Correct</dt><dd data-metric="correct">6</dd></div>
+              <div><dt>Wrong</dt><dd data-metric="wrong">4</dd></div>
+              <div><dt>Median time</dt><dd data-metric="median">900 ms</dd></div>
+            </dl>
+          </article>
+          <article class="stat-card" data-detector="veto">
+            <h3>Veto</h3>
+            <dl class="coverage">
+              <dt>Committed</dt>
+              <dd data-metric="coverage">6<span>/18</span></dd>
+            </dl>
+            <dl class="metrics">
+              <div><dt>Correct</dt><dd data-metric="correct">3</dd></div>
+              <div><dt>Wrong</dt><dd data-metric="wrong">3</dd></div>
+              <div><dt>Median time</dt><dd data-metric="median">2,000 ms</dd></div>
+            </dl>
+          </article>
+          <article class="stat-card" data-detector="score">
+            <h3>Evidence score</h3>
+            <dl class="coverage">
+              <dt>Committed</dt>
+              <dd data-metric="coverage">6<span>/18</span></dd>
+            </dl>
+            <dl class="metrics">
+              <div><dt>Correct</dt><dd data-metric="correct">3</dd></div>
+              <div><dt>Wrong</dt><dd data-metric="wrong">3</dd></div>
+              <div><dt>Median time</dt><dd data-metric="median">2,000 ms</dd></div>
+            </dl>
+          </article>
+        </div>
+        <div class="results-details">
+          <table id="eval-results">
+            <caption>Acoustic results on the reserved v2 eval split</caption>
+            <thead>
+              <tr>
+                <th scope="col">Detector</th>
+                <th scope="col">Committed</th>
+                <th scope="col">Correct</th>
+                <th scope="col">Wrong</th>
+                <th scope="col">Median time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">v1</th>
+                <td>10/18</td>
+                <td>6</td>
+                <td>4</td>
+                <td>900 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">Veto</th>
+                <td>6/18</td>
+                <td>3</td>
+                <td>3</td>
+                <td>2,000 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">Evidence score</th>
+                <td>6/18</td>
+                <td>3</td>
+                <td>3</td>
+                <td>2,000 ms</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Coverage counts decisions out of all eligible cases. Median time is measured among commitments.</p>
+          <a class="text-link" href="https://github.com/aneesh2411/whoanswered/blob/main/docs/v2-eval-comparison.json">Published evaluation report</a>
+        </div>
+      </div>
+    </section>
 
-      <section id="quickstart" class="content-section">
-        <h2>Quickstart</h2>
-        <p>From the repository root, validate and replay the public challenge pack with Python 3.12.</p>
-        <pre><code>python -m whoanswered validate --pack fixtures/v1
+    <section class="section limits" aria-labelledby="limits-title">
+      <div class="wrap">
+        <div class="limits-card" data-reveal>
+          <p class="eyebrow">Honest limits</p>
+          <h2 id="limits-title">Real phone audio is untested.</h2>
+          <p>All audio is authored synthetic audio.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart" class="section dark quickstart" aria-labelledby="quickstart-title">
+      <div class="wrap quickstart-grid">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Quickstart</p>
+          <h2 id="quickstart-title">Run it locally.</h2>
+          <p>From the repository root, use Python 3.12 to replay the public challenge pack or reproduce the reserved evaluation.</p>
+        </div>
+        <div class="code-card" data-reveal>
+          <div class="code-group">
+            <div class="code-heading">
+              <h3>Validate and replay</h3>
+              <button class="copy-button" type="button" aria-label="Copy replay commands" hidden>Copy</button>
+            </div>
+            <pre><code>python -m whoanswered validate --pack fixtures/v1
 python -m whoanswered replay --pack fixtures/v1 --out build/replay</code></pre>
-        <p>To reproduce the reserved evaluation comparison, run these commands.</p>
-        <pre><code>python -m whoanswered compare --pack fixtures/v2/eval --policy-pack fixtures/v1 --out build/compare
+            <p class="copy-status" role="status"></p>
+          </div>
+          <div class="code-group">
+            <div class="code-heading">
+              <h3>Reproduce the comparison</h3>
+              <button class="copy-button" type="button" aria-label="Copy comparison commands" hidden>Copy</button>
+            </div>
+            <pre><code>python -m whoanswered compare --pack fixtures/v2/eval --policy-pack fixtures/v1 --out build/compare
 cmp docs/v2-eval-comparison.json build/compare/comparison.json</code></pre>
-      </section>
-    </div>
+            <p class="copy-status" role="status"></p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
-    <nav class="wrap" aria-label="Project resources">
-      <a href="https://github.com/aneesh2411/whoanswered">Repository</a>
-      <a href="https://github.com/aneesh2411/whoanswered/blob/main/README.md">README</a>
-      <a href="https://github.com/aneesh2411/whoanswered/blob/main/LICENSE">MIT license</a>
-    </nav>
+    <div class="wrap footer-inner">
+      <a class="wordmark" href="#top">WhoAnswered</a>
+      <nav aria-label="Project resources">
+        <a href="https://github.com/aneesh2411/whoanswered">Repository</a>
+        <a href="https://github.com/aneesh2411/whoanswered/blob/main/README.md">README</a>
+        <a href="https://github.com/aneesh2411/whoanswered/blob/main/LICENSE">MIT license</a>
+      </nav>
+    </div>
   </footer>
 </body>
 </html>
