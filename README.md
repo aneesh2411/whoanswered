@@ -6,6 +6,10 @@ WhoAnswered is the Two-Second Decision Challenge, an open benchmark for the
 first two seconds of an outbound call. It asks who or what answered, when an
 agent should commit to a decision, and when it should say it is uncertain.
 
+Install the Python library with `pip install .` from a checkout. It provides a
+streaming detector API for live call audio and a plugin interface for scoring
+your own detector on the benchmark packs. [Python API and plugins](docs/api.md)
+
 ## Reviewer walkthrough
 
 From the extracted ZIP directory, run the public v1 replay with Python 3.12.

@@ -4,7 +4,9 @@ import hashlib
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from typing import Any
 
+from ._detector import Decision, Detector as StreamingDetector, _V1Session
 from .baseline import AudioBaseline, DetectorUpdate
 from .fixtures import (
     CUTOFF_MS,
@@ -31,8 +33,8 @@ class Observation:
     audio: bytes | None = None
 
 
-# A detector may return a verdict, a trace reason with an optional verdict, or None.
-Detector = Callable[[Observation], str | DetectorUpdate | None]
+type Detector = Callable[[Observation], str | DetectorUpdate | Decision | None]
+type Scorecard = dict[str, Any]
 PolicyRunner = Callable[[Iterable[PolicyEvent], InMemoryPlaybackSink], None]
 
 
@@ -56,17 +58,53 @@ def replay(
     policy_runner: PolicyRunner = run_policy,
 ) -> None:
     """Replay a validated pack with a fresh detector and playback sink for each case."""
-    cases = load_pack(pack)
     factory = AudioBaseline if detector_factory is None else detector_factory
+    results = _replay_results(pack, factory, policy_runner)
+    _write_replay(results, build_scorecard(results), out)
+
+
+def evaluate(detector: StreamingDetector, pack_path: str | Path) -> Scorecard:
+    """Score a fixture pack with a fresh session per case, without writing files."""
+    return build_scorecard(_replay_results(Path(pack_path), lambda: _streaming_replay(detector), run_policy))
+
+
+def replay_pack(detector: StreamingDetector, pack_path: str | Path, out: str | Path) -> Scorecard:
+    """Replay a pack, write its scorecard and traces to ``out``, and return the scorecard."""
+    results = _replay_results(Path(pack_path), lambda: _streaming_replay(detector), run_policy)
+    scorecard = build_scorecard(results)
+    _write_replay(results, scorecard, Path(out))
+    return scorecard
+
+
+def _streaming_replay(detector: StreamingDetector) -> Detector:
+    session = detector.start()
+    if isinstance(session, _V1Session):
+        return session._observe
+
+    def observe(observation: Observation) -> Decision | None:
+        if observation.audio is not None:
+            return session.feed_audio(observation.audio, t_ms=observation.at_ms)
+        update = session.feed_event(observation.event, t_ms=observation.at_ms)
+        if observation.event == "cutoff" and update is None:
+            return session.decision()
+        return update
+
+    return observe
+
+
+def _replay_results(pack: Path, factory: Callable[[], Detector], policy_runner: PolicyRunner) -> list[CaseReplay]:
     results = []
-    for case in cases:
+    for case in load_pack(pack):
         result = replay_case(case, factory())
         if case.track == "policy":
             result.actions = replay_policy(case, policy_runner)
         results.append(result)
+    return results
 
+
+def _write_replay(results: list[CaseReplay], scorecard: Scorecard, out: Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
-    (out / "scorecard.json").write_bytes(canonical_json(build_scorecard(results)))
+    (out / "scorecard.json").write_bytes(canonical_json(scorecard))
     (out / "traces.jsonl").write_bytes(canonical_jsonl([
         {
             "case_id": result.case.case_id,
@@ -123,14 +161,21 @@ def replay_case(case: FixtureCase, detector: Detector, *, cutoff_only: bool = Fa
     trace = []
     for observation in _observations(case.observable):
         update = detector(observation)
-        if isinstance(update, DetectorUpdate):
+        decision_ms = observation.at_ms
+        if isinstance(update, Decision):
+            verdict = update.label if update.committed else None
+            if not update.committed and observation.event == "cutoff":
+                verdict = "uncertain"
+            reason = update.reason
+            decision_ms = update.at_ms
+        elif isinstance(update, DetectorUpdate):
             verdict, reason = update.verdict, update.reason
         else:
             verdict, reason = update, None
         if initial_verdict is None and verdict is not None:
             initial_verdict = verdict
             if verdict != "uncertain":
-                commitment_ms = observation.at_ms
+                commitment_ms = decision_ms
 
         entry = {"at_ms": observation.at_ms, "event": observation.event}
         if observation.sequence is not None:

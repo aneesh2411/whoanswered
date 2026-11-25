@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 
+from ._plugins import DetectorSpecError, load_detector_factory
 from .bundle import bundle
 from .comparison import DETECTOR_FACTORIES, compare
 from .fixtures import FixtureValidationError, load_pack, validate_split_boundary
@@ -28,6 +29,8 @@ def main() -> None:
         "--policy-pack", type=Path, help="Fixture directory for the separate scripted policy checks",
     )
     compare_parser.add_argument("--out", required=True, type=Path, help="Output directory")
+    # Keep the published help text byte-stable. Plugin syntax is in docs/api.md.
+    compare_parser.add_argument("--detector", help=argparse.SUPPRESS)
     tune_parser = commands.add_parser("tune", help="Select the operating point on development cases")
     tune_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 dev-only fixture directory")
     tune_parser.add_argument("--out", required=True, type=Path, help="Output directory")
@@ -42,17 +45,19 @@ def main() -> None:
             if len(packs) > 1:
                 validate_split_boundary(case for pack in packs for case in pack)
         elif args.command == "replay":
-            factory = DETECTOR_FACTORIES.get(args.detector)
-            if factory is None:
-                available = ", ".join(DETECTOR_FACTORIES)
-                parser.exit(2, f"whoanswered: unknown detector {args.detector!r} (choose from {available})\n")
-            replay(args.pack, args.out, detector_factory=factory)
+            replay(args.pack, args.out, detector_factory=load_detector_factory(args.detector))
         elif args.command == "compare":
-            compare(args.pack, args.out, policy_pack=args.policy_pack)
+            factories = None if args.detector is None else {
+                "v1": DETECTOR_FACTORIES["v1"],
+                args.detector: load_detector_factory(args.detector),
+            }
+            compare(args.pack, args.out, policy_pack=args.policy_pack, detector_factories=factories)
         elif args.command == "tune":
             tune(args.pack, args.out)
         else:
             bundle(args.pack, args.out)
+    except DetectorSpecError as error:
+        parser.exit(2, f"whoanswered: {error}\n")
     except FixtureValidationError as error:
         parser.exit(1, f"whoanswered: {error}\n")
     except OSError as error:

@@ -12,6 +12,7 @@ from zipfile import ZIP_STORED, ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 PACK = Path("fixtures/v1")
 EXPECTED = ROOT / "tests" / "expected" / "v1"
+REVIEWER = EXPECTED / "reviewer"
 REPLAY_OUT = Path("build/replay")
 REPLAY_ARGS = ("replay", "--pack", PACK.as_posix(), "--out", REPLAY_OUT.as_posix())
 DENY_SOCKETS = """\
@@ -58,7 +59,7 @@ class ReleaseTest(unittest.TestCase):
 
         sources = {
             "LICENSE": ROOT / "LICENSE",
-            "README.md": ROOT / "README.md",
+            "README.md": REVIEWER / "README.md",
             "fixtures/LICENSE.md": ROOT / "fixtures" / "LICENSE.md",
             "reference/scorecard.json": EXPECTED / "scorecard.json",
         }
@@ -69,8 +70,13 @@ class ReleaseTest(unittest.TestCase):
             for payload in case["payloads"].values():
                 path = PACK / payload["path"]
                 sources[path.as_posix()] = ROOT / path
-        for module in (ROOT / "whoanswered").glob("*.py"):
-            sources[f"whoanswered/{module.name}"] = module
+        for name in (
+            "__init__", "__main__", "baseline", "bundle", "comparison", "fixtures",
+            "policy", "replay", "scorecard", "selection", "veto",
+        ):
+            filename = f"{name}.py"
+            frozen = REVIEWER / filename
+            sources[f"whoanswered/{filename}"] = frozen if frozen.is_file() else ROOT / "whoanswered" / filename
 
         with ZipFile(self.archive) as archive:
             self.assertEqual(archive.namelist(), sorted(sources))
@@ -81,6 +87,11 @@ class ReleaseTest(unittest.TestCase):
                     self.assertEqual(entry.external_attr >> 16, 0o100644)
                     self.assertEqual(entry.compress_type, ZIP_STORED)
                     self.assertEqual(archive.read(entry), sources[entry.filename].read_bytes())
+
+        self.assertEqual(
+            hashlib.sha256(self.archive.read_bytes()).hexdigest(),
+            "41bf458a3c7ca4e3041d4707d8ae13a573aee9271b6f386106da55643bf87aed",
+        )
 
     def test_clean_extraction_reproduces_golden_replay(self):
         for socket_denied, launch in ((False, ["-m", "whoanswered"]), (True, ["-c", DENY_SOCKETS])):

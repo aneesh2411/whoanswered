@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whoanswered"
+version = "0.1.0"
+description = "Streaming call answer detection and an offline benchmark"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = []
+
+[project.scripts]
+whoanswered = "whoanswered.__main__:main"
+
+[project.urls]
+Repository = "https://github.com/aneesh2411/whoanswered"
+Documentation = "https://github.com/aneesh2411/whoanswered/blob/main/docs/api.md"
+
+[tool.setuptools]
+packages = ["whoanswered"]
+
+[tool.setuptools.package-data]
+whoanswered = ["py.typed"]
