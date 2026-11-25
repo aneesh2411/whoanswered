@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhoAnswered | Two-Second Decision Challenge</title>
+  <meta name="description" content="WhoAnswered is an open benchmark for deciding who or what answered during the first two seconds of an outbound call.">
+  <meta property="og:title" content="WhoAnswered | Two-Second Decision Challenge">
+  <meta property="og:description" content="Explore the Two-Second Decision Challenge and compare its detectors on the reserved synthetic evaluation pack.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="#top">WhoAnswered</a>
+      <nav aria-label="On this page">
+        <a href="#results">Results</a>
+        <a href="#quickstart">Quickstart</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div class="wrap">
+        <h1>Who picked up?</h1>
+        <p>WhoAnswered is the Two-Second Decision Challenge, an open benchmark for the first two seconds of an outbound call.</p>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="overview">
+        <section>
+          <h2>The problem</h2>
+          <p>When an outbound call connects, the agent has to decide whether it reached a human, voicemail, a screener, or silence. An opening “hello” can sound identical for a human and voicemail. When the evidence is ambiguous, the agent can say it is uncertain.</p>
+        </section>
+
+        <section>
+          <h2>How it works</h2>
+          <p>A benchmark pack supplies authored audio and scripted call events. Replay feeds the same observations to deterministic detectors. Candidate settings are calibrated on the development split to decide when to commit or abstain.</p>
+          <p>Scoring treats <code>uncertain</code> as a valid abstention and tracks committed coverage and errors among commitments separately.</p>
+        </section>
+      </div>
+
+      <section id="results" class="content-section">
+        <h2>Results</h2>
+        <table id="eval-results">
+          <caption>Acoustic results on the reserved v2 eval split</caption>
+          <thead>
+            <tr>
+              <th scope="col">Detector</th>
+              <th scope="col">Committed</th>
+              <th scope="col">Correct</th>
+              <th scope="col">Wrong</th>
+              <th scope="col">Median time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">v1</th>
+              <td>10/18</td>
+              <td>6</td>
+              <td>4</td>
+              <td>900 ms</td>
+            </tr>
+            <tr>
+              <th scope="row">Veto</th>
+              <td>6/18</td>
+              <td>3</td>
+              <td>3</td>
+              <td>2,000 ms</td>
+            </tr>
+            <tr>
+              <th scope="row">Evidence score</th>
+              <td>6/18</td>
+              <td>3</td>
+              <td>3</td>
+              <td>2,000 ms</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Committed counts decisions out of all eligible cases. Median time is measured among commitments. <a href="https://github.com/aneesh2411/whoanswered/blob/main/docs/v2-eval-comparison.json">Published evaluation report</a></p>
+      </section>
+
+      <section class="limits">
+        <h2>Honest limits</h2>
+        <p>All audio is authored synthetic audio. Real phone audio is untested.</p>
+      </section>
+
+      <section id="quickstart" class="content-section">
+        <h2>Quickstart</h2>
+        <p>From the repository root, validate and replay the public challenge pack with Python 3.12.</p>
+        <pre><code>python -m whoanswered validate --pack fixtures/v1
+python -m whoanswered replay --pack fixtures/v1 --out build/replay</code></pre>
+        <p>To reproduce the reserved evaluation comparison, run these commands.</p>
+        <pre><code>python -m whoanswered compare --pack fixtures/v2/eval --policy-pack fixtures/v1 --out build/compare
+cmp docs/v2-eval-comparison.json build/compare/comparison.json</code></pre>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="wrap" aria-label="Project resources">
+      <a href="https://github.com/aneesh2411/whoanswered">Repository</a>
+      <a href="https://github.com/aneesh2411/whoanswered/blob/main/README.md">README</a>
+      <a href="https://github.com/aneesh2411/whoanswered/blob/main/LICENSE">MIT license</a>
+    </nav>
+  </footer>
+</body>
+</html>
