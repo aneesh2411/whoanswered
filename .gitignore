@@ -1,2 +1,9 @@
 /build/
 __pycache__/
+.env
+.env.*
+*.env
+recordings/
+downloads/
+*.wav
+*.mp3

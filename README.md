@@ -211,6 +211,11 @@ two wrong commitments. V1 remains the default.
 [Detector rules and development results](docs/v3-signals.md) ·
 [Fixture sources](fixtures/v3/README.md)
 
+## Never commit
+
+Keep real call audio, recordings, Twilio SIDs and tokens, personal phone
+numbers and email addresses, and vault data private and outside the repository.
+
 ## License
 
 [MIT](LICENSE) · [Fixture license](fixtures/LICENSE.md)
