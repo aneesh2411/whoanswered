@@ -6,9 +6,37 @@ WhoAnswered is the Two-Second Decision Challenge, an open benchmark for the
 first two seconds of an outbound call. It asks who or what answered, when an
 agent should commit to a decision, and when it should say it is uncertain.
 
-Install the Python library with `pip install .` from a checkout. It provides a
-streaming detector API for live call audio and a plugin interface for scoring
-your own detector on the benchmark packs. [Python API and plugins](docs/api.md)
+## Install
+
+Use Python 3.12 or later and install from GitHub.
+
+```sh
+pip install git+https://github.com/aneesh2411/whoanswered
+```
+
+### Use it in your voice agent
+
+This synthetic greeting and pause exercise the same session API your agent
+uses for incoming audio. The example prints `human`.
+
+```python
+from whoanswered import V1Detector
+
+session = V1Detector().start()
+session.feed_event("call_answered", t_ms=0)
+session.feed_event("start", t_ms=0)
+greeting, silence = b"\x00" * 160, b"\xff" * 160
+for index, frame in enumerate([greeting] * 6 + [silence] * 24, start=1):
+    session.feed_audio(frame, t_ms=index * 20)
+result = session.decision()
+print(result.label if result.committed else "uncertain")
+```
+
+All audio in the benchmark is authored synthetic audio. Real phone audio is
+untested.
+
+[Integration guide](docs/integration.md) · [Python API](docs/api.md) ·
+[Write a detector](docs/write-a-detector.md)
 
 ## Reviewer walkthrough
 
