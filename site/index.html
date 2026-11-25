@@ -257,6 +257,42 @@ cmp docs/v2-eval-comparison.json build/compare/comparison.json</code></pre>
         </div>
       </div>
     </section>
+
+    <section id="use-it-in-your-agent" class="section" aria-labelledby="agent-title">
+      <div class="wrap quickstart-grid">
+        <div class="section-heading" data-reveal>
+          <h2 id="agent-title">Use it in your agent</h2>
+          <p>Install from GitHub with Python 3.12 or later. Try a synthetic greeting and pause with the streaming API. <a class="text-link" href="https://github.com/aneesh2411/whoanswered/blob/main/docs/integration.md">Integration guide</a></p>
+        </div>
+        <div class="code-card dark" data-reveal>
+          <div class="code-group">
+            <div class="code-heading">
+              <h3>Install</h3>
+              <button class="copy-button" type="button" aria-label="Copy install command" hidden>Copy</button>
+            </div>
+            <pre><code>pip install git+https://github.com/aneesh2411/whoanswered</code></pre>
+            <p class="copy-status" role="status"></p>
+          </div>
+          <div class="code-group">
+            <div class="code-heading">
+              <h3>Try a session</h3>
+              <button class="copy-button" type="button" aria-label="Copy Python example" hidden>Copy</button>
+            </div>
+            <pre><code>from whoanswered import V1Detector
+
+session = V1Detector().start()
+session.feed_event("call_answered", t_ms=0)
+session.feed_event("start", t_ms=0)
+greeting, silence = b"\x00" * 160, b"\xff" * 160
+for index, frame in enumerate([greeting] * 6 + [silence] * 24, start=1):
+    session.feed_audio(frame, t_ms=index * 20)
+result = session.decision()
+print(result.label if result.committed else "uncertain")</code></pre>
+            <p class="copy-status" role="status"></p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
