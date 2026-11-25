@@ -16,7 +16,7 @@ REVIEWER_MODULES = (
     "__init__", "__main__", "baseline", "bundle", "comparison", "fixtures",
     "policy", "replay", "scorecard", "selection", "veto",
 )
-FROZEN_MODULES = {"__init__", "__main__", "bundle", "replay"}
+FROZEN_MODULES = {"__init__", "__main__", "bundle", "comparison", "fixtures", "replay"}
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 ZIP_FILE_MODE = 0o100644
 
@@ -41,7 +41,7 @@ def bundle(pack: Path, out: Path) -> None:
         "reference/scorecard.json": root / REFERENCE,
     }
     # The reviewer ZIP embeds source. Use the frozen copies of modules changed
-    # by the library release so the archive remains identical.
+    # since publication so the archive remains identical.
     for name in REVIEWER_MODULES:
         source_dir = REVIEWER_SOURCES if name in FROZEN_MODULES else Path("whoanswered")
         files[f"whoanswered/{name}.py"] = root / source_dir / f"{name}.py"

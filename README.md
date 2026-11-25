@@ -32,8 +32,8 @@ result = session.decision()
 print(result.label if result.committed else "uncertain")
 ```
 
-All audio in the benchmark is authored synthetic audio. Real phone audio is
-untested.
+All transcripts and audio in the benchmark are authored synthetic signals.
+Real ASR output and real phone audio are untested.
 
 [Integration guide](docs/integration.md) · [Python API](docs/api.md) ·
 [Write a detector](docs/write-a-detector.md)
@@ -178,6 +178,38 @@ policy cases passed the separate policy gate.
 because both fell below v1's coverage.
 [Published EVAL report](docs/v2-eval-comparison.json) ·
 [Revision 2 evaluation rules](docs/fixture-format.md#revision-2-evaluation-rules)
+
+## v3 transcript and tone evaluation
+
+The v3 dev and reserved eval splits each contain 20 scenarios with authored
+synthetic transcripts and audio. Real ASR output and real phone audio are
+untested. We froze eval before tuning on dev and ran one reserved comparison
+after fixing the rules and settings.
+
+```sh
+python -m whoanswered compare --pack fixtures/v3/eval --policy-pack fixtures/v1 --out build/v3-eval
+```
+
+The table covers 15 unpaired human and mailbox scenarios at the 2,000 ms
+cutoff. The report also checks both matched pairs and the six scripted v1
+policy cases. All those checks passed. Transcript and fusion identified
+the separate screener case. V1 and tone abstained on that case.
+
+| Detector | Committed coverage | Correct / eligible | Wrong commitments | Human as mailbox | Mailbox as human | Median commitment |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| v1 | 10/15 | 7/15 | 3 | 1/8 | 2/7 | 720 ms |
+| Transcript | 11/15 | 9/15 | 2 | 1/8 | 1/7 | 570 ms |
+| Tone | 3/15 | 3/15 | 0 | 0/8 | 0/7 | 1,500 ms |
+| Fusion | 8/15 | 8/15 | 0 | 0/8 | 0/7 | 2,000 ms |
+
+Fusion made one more correct commitment and three fewer errors than v1,
+with lower coverage and a later median commitment. It missed the promotion
+rule on coverage. Transcript alone met the rule on this authored pack with
+two wrong commitments. V1 remains the default.
+
+[Published eval report](docs/v3-eval-comparison.json) ·
+[Detector rules and development results](docs/v3-signals.md) ·
+[Fixture sources](fixtures/v3/README.md)
 
 ## License
 

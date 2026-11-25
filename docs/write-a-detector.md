@@ -44,7 +44,12 @@ and its settings are fixed, run `compare` on the reserved evaluation split.
 `comparison.json` reports the plugin alongside the `v1` reference, including
 correct and wrong commitments, abstentions, and commitment timing. The
 always-uncertain example has zero committed coverage. All fixture audio is
-authored synthetic audio. Real phone audio is untested.
+authored synthetic audio. The v3 transcripts are also authored synthetic.
+Real ASR output and real phone audio are untested.
 
 [Python API and plugin errors](api.md) ·
 [Evaluation rules](fixture-format.md#revision-2-evaluation-rules)
+
+Sessions can optionally implement `feed_transcript(text, *, t_ms, final)`
+for v3 packs. Use the answer-relative arrival time and process updates in
+replay order. [Transcript API](api.md#streaming-a-call)

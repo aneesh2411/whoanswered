@@ -1,0 +1,644 @@
+{
+  "acoustic": {
+    "fusion": {
+      "abstentions_by_class": {
+        "human": {
+          "denominator": 8,
+          "numerator": 3,
+          "rate": 0.375
+        },
+        "voicemail": {
+          "denominator": 7,
+          "numerator": 4,
+          "rate": 0.5714285714285714
+        }
+      },
+      "abstentions_by_family": {
+        "agreement": {
+          "denominator": 4,
+          "numerator": 1,
+          "rate": 0.25
+        },
+        "beep": {
+          "denominator": 2,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "disagreement": {
+          "denominator": 3,
+          "numerator": 2,
+          "rate": 0.6666666666666666
+        },
+        "late-signal": {
+          "denominator": 2,
+          "numerator": 2,
+          "rate": 1.0
+        },
+        "tone-control": {
+          "denominator": 1,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "transcript-noise": {
+          "denominator": 3,
+          "numerator": 2,
+          "rate": 0.6666666666666666
+        }
+      },
+      "committed_coverage": {
+        "denominator": 15,
+        "numerator": 8,
+        "rate": 0.5333333333333333
+      },
+      "committed_error": {
+        "denominator": 8,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "correct_over_all_eligible": {
+        "denominator": 15,
+        "numerator": 8,
+        "rate": 0.5333333333333333
+      },
+      "human_as_mailbox": {
+        "denominator": 8,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "mailbox_as_human": {
+        "denominator": 7,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "median_commitment_ms": 2000.0
+    },
+    "tone": {
+      "abstentions_by_class": {
+        "human": {
+          "denominator": 8,
+          "numerator": 8,
+          "rate": 1.0
+        },
+        "voicemail": {
+          "denominator": 7,
+          "numerator": 4,
+          "rate": 0.5714285714285714
+        }
+      },
+      "abstentions_by_family": {
+        "agreement": {
+          "denominator": 4,
+          "numerator": 4,
+          "rate": 1.0
+        },
+        "beep": {
+          "denominator": 2,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "disagreement": {
+          "denominator": 3,
+          "numerator": 2,
+          "rate": 0.6666666666666666
+        },
+        "late-signal": {
+          "denominator": 2,
+          "numerator": 2,
+          "rate": 1.0
+        },
+        "tone-control": {
+          "denominator": 1,
+          "numerator": 1,
+          "rate": 1.0
+        },
+        "transcript-noise": {
+          "denominator": 3,
+          "numerator": 3,
+          "rate": 1.0
+        }
+      },
+      "committed_coverage": {
+        "denominator": 15,
+        "numerator": 3,
+        "rate": 0.2
+      },
+      "committed_error": {
+        "denominator": 3,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "correct_over_all_eligible": {
+        "denominator": 15,
+        "numerator": 3,
+        "rate": 0.2
+      },
+      "human_as_mailbox": {
+        "denominator": 8,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "mailbox_as_human": {
+        "denominator": 7,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "median_commitment_ms": 1500
+    },
+    "transcript": {
+      "abstentions_by_class": {
+        "human": {
+          "denominator": 8,
+          "numerator": 1,
+          "rate": 0.125
+        },
+        "voicemail": {
+          "denominator": 7,
+          "numerator": 3,
+          "rate": 0.42857142857142855
+        }
+      },
+      "abstentions_by_family": {
+        "agreement": {
+          "denominator": 4,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "beep": {
+          "denominator": 2,
+          "numerator": 1,
+          "rate": 0.5
+        },
+        "disagreement": {
+          "denominator": 3,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "late-signal": {
+          "denominator": 2,
+          "numerator": 2,
+          "rate": 1.0
+        },
+        "tone-control": {
+          "denominator": 1,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "transcript-noise": {
+          "denominator": 3,
+          "numerator": 1,
+          "rate": 0.3333333333333333
+        }
+      },
+      "committed_coverage": {
+        "denominator": 15,
+        "numerator": 11,
+        "rate": 0.7333333333333333
+      },
+      "committed_error": {
+        "denominator": 11,
+        "numerator": 2,
+        "rate": 0.18181818181818182
+      },
+      "correct_over_all_eligible": {
+        "denominator": 15,
+        "numerator": 9,
+        "rate": 0.6
+      },
+      "human_as_mailbox": {
+        "denominator": 8,
+        "numerator": 1,
+        "rate": 0.125
+      },
+      "mailbox_as_human": {
+        "denominator": 7,
+        "numerator": 1,
+        "rate": 0.14285714285714285
+      },
+      "median_commitment_ms": 570
+    },
+    "v1": {
+      "abstentions_by_class": {
+        "human": {
+          "denominator": 8,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "voicemail": {
+          "denominator": 7,
+          "numerator": 5,
+          "rate": 0.7142857142857143
+        }
+      },
+      "abstentions_by_family": {
+        "agreement": {
+          "denominator": 4,
+          "numerator": 1,
+          "rate": 0.25
+        },
+        "beep": {
+          "denominator": 2,
+          "numerator": 2,
+          "rate": 1.0
+        },
+        "disagreement": {
+          "denominator": 3,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "late-signal": {
+          "denominator": 2,
+          "numerator": 2,
+          "rate": 1.0
+        },
+        "tone-control": {
+          "denominator": 1,
+          "numerator": 0,
+          "rate": 0.0
+        },
+        "transcript-noise": {
+          "denominator": 3,
+          "numerator": 0,
+          "rate": 0.0
+        }
+      },
+      "committed_coverage": {
+        "denominator": 15,
+        "numerator": 10,
+        "rate": 0.6666666666666666
+      },
+      "committed_error": {
+        "denominator": 10,
+        "numerator": 3,
+        "rate": 0.3
+      },
+      "correct_over_all_eligible": {
+        "denominator": 15,
+        "numerator": 7,
+        "rate": 0.4666666666666667
+      },
+      "human_as_mailbox": {
+        "denominator": 8,
+        "numerator": 1,
+        "rate": 0.125
+      },
+      "mailbox_as_human": {
+        "denominator": 7,
+        "numerator": 2,
+        "rate": 0.2857142857142857
+      },
+      "median_commitment_ms": 720.0
+    }
+  },
+  "cutoff_ms": 2000,
+  "detectors": {
+    "fusion": {
+      "thresholds": {
+        "audio": {
+          "active_mean_square": 262144,
+          "greeting_max_ms": 360,
+          "greeting_min_ms": 120,
+          "mailbox_min_ms": 1000,
+          "opening_pause_min_ms": 480
+        },
+        "human_agreement_cutoff_ms": 2000,
+        "tone": {
+          "active_mean_square": 262144,
+          "max_hz": 2000,
+          "max_ms": 600,
+          "min_energy_share": 0.8,
+          "min_hz": 400,
+          "min_ms": 160,
+          "min_speech_ms": 40,
+          "step_hz": 25
+        },
+        "transcript": {
+          "final_only": true,
+          "max_human_words": 8
+        }
+      },
+      "version": {
+        "_detector.py": "5d3435ab100f5a98eb87759d482ea3085b176f7d8d68dcfb6a1ac390cafb5a8d",
+        "baseline.py": "173e7de5933b4524b0b9d29294b0459e2d7ba887e2956c92eeba3d096eef34b0",
+        "signals.py": "1d253ef2d8c4e3e1c794d01b9dd02814840bf871f88ec6421abcca7a468a2d7d",
+        "transcript_cues.json": "e0d720b60bed6f4dd41402dc3e7f5517813c3fcc47e713a10d183611d49d35fd"
+      }
+    },
+    "tone": {
+      "thresholds": {
+        "active_mean_square": 262144,
+        "max_hz": 2000,
+        "max_ms": 600,
+        "min_energy_share": 0.8,
+        "min_hz": 400,
+        "min_ms": 160,
+        "min_speech_ms": 40,
+        "step_hz": 25
+      },
+      "version": {
+        "_detector.py": "5d3435ab100f5a98eb87759d482ea3085b176f7d8d68dcfb6a1ac390cafb5a8d",
+        "baseline.py": "173e7de5933b4524b0b9d29294b0459e2d7ba887e2956c92eeba3d096eef34b0",
+        "signals.py": "1d253ef2d8c4e3e1c794d01b9dd02814840bf871f88ec6421abcca7a468a2d7d"
+      }
+    },
+    "transcript": {
+      "thresholds": {
+        "final_only": true,
+        "max_human_words": 8
+      },
+      "version": {
+        "_detector.py": "5d3435ab100f5a98eb87759d482ea3085b176f7d8d68dcfb6a1ac390cafb5a8d",
+        "signals.py": "1d253ef2d8c4e3e1c794d01b9dd02814840bf871f88ec6421abcca7a468a2d7d",
+        "transcript_cues.json": "e0d720b60bed6f4dd41402dc3e7f5517813c3fcc47e713a10d183611d49d35fd"
+      }
+    },
+    "v1": {
+      "thresholds": {
+        "active_mean_square": 262144,
+        "greeting_max_ms": 360,
+        "greeting_min_ms": 120,
+        "mailbox_min_ms": 1000,
+        "opening_pause_min_ms": 480
+      },
+      "version": {
+        "baseline.py": "173e7de5933b4524b0b9d29294b0459e2d7ba887e2956c92eeba3d096eef34b0"
+      }
+    }
+  },
+  "eligible_case_ids": [
+    "eval-human-at-cutoff",
+    "eval-human-bad-final",
+    "eval-human-brief-tone",
+    "eval-human-corrected-partial",
+    "eval-human-empty",
+    "eval-human-long",
+    "eval-human-name",
+    "eval-human-question",
+    "eval-mailbox-beep",
+    "eval-mailbox-beep-only",
+    "eval-mailbox-late-final",
+    "eval-mailbox-late-tone",
+    "eval-mailbox-short-no-tone",
+    "eval-mailbox-wording",
+    "eval-mailbox-wrong-human"
+  ],
+  "frame_ms": 20,
+  "matched_prefix_assertions": {
+    "fusion": [
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-ambiguous-human": "uncertain",
+          "eval-ambiguous-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-ambiguous",
+        "passed": true
+      },
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-paused-human": "uncertain",
+          "eval-paused-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-paused",
+        "passed": true
+      }
+    ],
+    "tone": [
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-ambiguous-human": "uncertain",
+          "eval-ambiguous-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-ambiguous",
+        "passed": true
+      },
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-paused-human": "uncertain",
+          "eval-paused-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-paused",
+        "passed": true
+      }
+    ],
+    "transcript": [
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-ambiguous-human": "uncertain",
+          "eval-ambiguous-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-ambiguous",
+        "passed": true
+      },
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-paused-human": "uncertain",
+          "eval-paused-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-paused",
+        "passed": true
+      }
+    ],
+    "v1": [
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-ambiguous-human": "uncertain",
+          "eval-ambiguous-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-ambiguous",
+        "passed": true
+      },
+      {
+        "identical_prefix": true,
+        "initial_verdicts": {
+          "eval-paused-human": "uncertain",
+          "eval-paused-mailbox": "uncertain"
+        },
+        "matched_pair": "eval-paused",
+        "passed": true
+      }
+    ]
+  },
+  "pack_manifest_sha256": "6180a70b654ff20338026364f8bea64e1dfabab60cedfcd881e67860e6d08544",
+  "policy_assertions": {
+    "cases": [
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 2420
+          }
+        ],
+        "case_id": "simulated-screener-caller-to-disconnect",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 2420
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 2420
+          }
+        ],
+        "case_id": "simulated-screener-caller-to-human",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 2420
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 2420
+          }
+        ],
+        "case_id": "simulated-screener-caller-to-mailbox",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1020
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 2420
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 1980
+          }
+        ],
+        "case_id": "simulated-screener-name-to-disconnect",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "cancel_playback",
+            "at_ms": 1980
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 1980
+          }
+        ],
+        "case_id": "simulated-screener-name-to-human",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "start_conversation",
+            "at_ms": 1980
+          }
+        ],
+        "passed": true
+      },
+      {
+        "actual_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 1980
+          }
+        ],
+        "case_id": "simulated-screener-name-to-mailbox",
+        "expected_actions": [
+          {
+            "action": "reply_identity_and_purpose",
+            "at_ms": 1180
+          },
+          {
+            "action": "play_voicemail",
+            "at_ms": 1980
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "passed": 6,
+    "total": 6
+  },
+  "policy_pack_manifest_sha256": "7d1811ffe978bbac96e0f7a1abe7e10a71652c0f53d7a0e2bdfb86465a5f981d",
+  "promotion": {
+    "fusion": false,
+    "tone": false,
+    "transcript": true
+  },
+  "screener_verdicts": {
+    "fusion": {
+      "eval-screener": "screener"
+    },
+    "tone": {
+      "eval-screener": "uncertain"
+    },
+    "transcript": {
+      "eval-screener": "screener"
+    },
+    "v1": {
+      "eval-screener": "uncertain"
+    }
+  },
+  "signal_provenance": {
+    "real_asr_output_tested": false,
+    "real_phone_audio_tested": false,
+    "transcripts_and_audio": "authored synthetic"
+  },
+  "split": "eval"
+}

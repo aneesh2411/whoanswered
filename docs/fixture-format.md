@@ -9,8 +9,7 @@ writes any results.
 ## Manifest
 
 `manifest.json` contains the JSON integers `schema_version` and
-`pack_version`. The fixture schema is `1` for both supported pack revisions
-(`1` and `2`). `cases` is a nonempty array sorted by `id` in lexicographic
+`pack_version`. The fixture schema is `1` for pack revisions `1`, `2`, and `3`. `cases` is a nonempty array sorted by `id` in lexicographic
 order.
 
 | Case field | Meaning |
@@ -20,8 +19,8 @@ order.
 | `source_group` | Nonempty identifier shared by cases derived from the same source. |
 | `provenance` | Nonempty description of where the case data came from or how it was generated. |
 | `license` | Nonempty license identifier or reference, such as `MIT`. |
-| `split` | Required in pack revision `2`. Use `dev` for development or `eval` for reserved evaluation. Revision `1` cases load with no split. |
-| `family` | Optional nonempty fixture family name in pack revision `2`. The comparison groups cases without a family under `unspecified`. |
+| `split` | Required in pack revisions `2` and `3`. Use `dev` for development or `eval` for reserved evaluation. Revision `1` cases load with no split. |
+| `family` | Optional nonempty fixture family name in pack revisions `2` and `3`. The comparison groups cases without a family under `unspecified`. |
 | `payloads` | Object with entries named `audio.ulaw`, `events.jsonl`, and `expected.json`. Each entry contains `path` and `sha256`. |
 | `policy_events` | Optional list for the `policy` track. Each record has a nonnegative, answer-relative integer `at_ms` and an `event` of `screener`, `prompt_end`, `human_takeover`, `mailbox_ready`, or `disconnect`. |
 
@@ -55,6 +54,7 @@ a case. Store records in increasing `(arrival_ms, sequence)` order, using
 | `connected` | The media transport connected. |
 | `start` | The media stream started. |
 | `media` | A frame arrived. This record also has `media: {"frame_index": n}`, where `n` is a nonnegative integer less than the number of audio frames. Arrival time is recorded separately from the frame's sample time. |
+| `transcript` | Optional in revision `3`. This record also has a string `text` (which may be empty) and a JSON boolean `final`. `arrival_ms` is when the update became available. |
 | `stop` | The media stream stopped. |
 | `call_completed` | Local signaling confirmed that the call ended. |
 
@@ -63,6 +63,15 @@ a case. Store records in increasing `(arrival_ms, sequence)` order, using
 {"arrival_ms":0,"event":"start","sequence":2}
 {"arrival_ms":20,"event":"media","media":{"frame_index":0},"sequence":3}
 ```
+
+In a revision 3 pack, a transcript record can follow the three records above.
+
+```jsonl
+{"arrival_ms":340,"event":"transcript","final":false,"sequence":4,"text":"Hello"}
+```
+
+The v3 transcripts and audio are authored synthetic signals. Real ASR output
+and real phone audio are untested.
 
 ## Evaluator assertions
 
@@ -86,7 +95,10 @@ Replay passes `.observable` to the case runner.
 Virtual time starts at `call_answered`. Replay delivers observations to a fresh
 detector in `(arrival_ms, sequence)` order. Each observation carries its event
 and answer-relative time. Media observations carry the sample start time and
-one frame of audio. Replay keeps the pack metadata, evaluator assertions, and
+one frame of audio. Transcript observations carry the text and final flag,
+which are also recorded in the trace. A transcript available at 2,000 ms
+arrives before cutoff. A transcript arriving later is visible only after
+the initial verdict freezes. Replay keeps the pack metadata, evaluator assertions, and
 full audio file outside the detector interface.
 
 The detector receives the `cutoff` observation at 2,000 ms, after the eligible
@@ -200,3 +212,6 @@ blank lines. Preserve non-ASCII characters in UTF-8. Duplicate keys and
 non-finite JSON numbers are invalid. `canonical_json` and `canonical_jsonl`
 in `whoanswered.fixtures` emit these encodings. Arrange arrays and event
 records in their specified order before encoding.
+
+Revision 3 uses the same evaluation rules and also reports screener verdicts
+separately. [Revision 3 signals and evaluation](v3-signals.md)

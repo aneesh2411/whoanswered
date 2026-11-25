@@ -80,7 +80,7 @@ class PluginTest(unittest.TestCase):
 
     def test_invalid_specs_fail_without_writing_output(self):
         for spec, message in (
-            ("unknown", "unknown detector 'unknown' (choose from v1, veto, score)"),
+            ("unknown", "unknown detector 'unknown' (choose from v1, veto, score, transcript, tone, fusion)"),
             ("examples.always_uncertain:", "invalid detector spec 'examples.always_uncertain:' (expected module:attribute)"),
             ("no_such_detector_module:create", "cannot import detector module 'no_such_detector_module': No module named 'no_such_detector_module'"),
             ("examples.always_uncertain:missing", "detector factory 'examples.always_uncertain:missing' is missing or not callable"),

@@ -13,7 +13,8 @@ from .policy import PolicyEvent
 
 SCHEMA_VERSION = 1
 PACK_VERSION = 1  # Frozen revision written by the public v1 generator.
-PACK_VERSIONS = (PACK_VERSION, 2)
+SIGNAL_PACK_VERSION = 3
+PACK_VERSIONS = (PACK_VERSION, 2, SIGNAL_PACK_VERSION)
 FRAME_BYTES = 160
 FRAME_MS = 20
 CUTOFF_MS = 2_000
@@ -38,6 +39,8 @@ class Event:
     arrival_ms: int
     sequence: int
     frame_index: int | None = None
+    text: str | None = None
+    final: bool = False
 
 
 @dataclass(frozen=True)
@@ -78,6 +81,7 @@ class FixtureCase:
     policy_events: tuple[PolicyEvent, ...] = ()
     split: str | None = None
     family: str | None = None
+    pack_version: int = PACK_VERSION
 
 
 def frame_ends_by_cutoff(frame_index: int) -> bool:
@@ -174,8 +178,11 @@ def _read_payload(root: Path, payload: object, filename: str, location: str) -> 
     return raw
 
 
-def _read_events(raw: bytes, frame_count: int, location: str) -> tuple[Event, ...]:
+def _read_events(
+    raw: bytes, frame_count: int, location: str, *, allow_transcript: bool = False,
+) -> tuple[Event, ...]:
     fields = {"event", "arrival_ms", "sequence"}
+    event_types = EVENT_TYPES | {"transcript"} if allow_transcript else EVENT_TYPES
     records = []
     events = []
     sequences = set()
@@ -192,13 +199,14 @@ def _read_events(raw: bytes, frame_count: int, location: str) -> tuple[Event, ..
             answer_count += 1
             if record.keys() != fields or not valid_times or arrival != 0:
                 raise FixtureValidationError("INVALID_ANSWER", line)
-        if not isinstance(kind, str) or kind not in EVENT_TYPES or not valid_times:
+        if not isinstance(kind, str) or kind not in event_types or not valid_times:
             raise FixtureValidationError("INVALID_EVENT", line)
         if sequence in sequences:
             raise FixtureValidationError("DUPLICATE_SEQUENCE", line)
         sequences.add(sequence)
 
-        frame_index = None
+        frame_index = text = None
+        final = False
         if kind == "media":
             media = record.get("media")
             if (record.keys() != fields | {"media"} or not isinstance(media, dict)
@@ -207,9 +215,14 @@ def _read_events(raw: bytes, frame_count: int, location: str) -> tuple[Event, ..
             frame_index = media["frame_index"]
             if not _nonnegative_int(frame_index) or frame_index >= frame_count:
                 raise FixtureValidationError("INVALID_FRAME_REFERENCE", line)
+        elif kind == "transcript":
+            if (record.keys() != fields | {"text", "final"}
+                    or not isinstance(record["text"], str) or type(record["final"]) is not bool):
+                raise FixtureValidationError("INVALID_TRANSCRIPT", line)
+            text, final = record["text"], record["final"]
         elif record.keys() != fields:
             raise FixtureValidationError("INVALID_EVENT", line)
-        events.append(Event(kind, arrival, sequence, frame_index))
+        events.append(Event(kind, arrival, sequence, frame_index, text, final))
 
     ordered = sorted(events, key=lambda event: (event.arrival_ms, event.sequence))
     if answer_count != 1 or events[0].event != "call_answered" or ordered[0].event != "call_answered":
@@ -275,7 +288,7 @@ def _read_case(root: Path, entry: dict, pack_version: int) -> FixtureCase:
         if not _nonblank(entry.get(field)):
             raise FixtureValidationError(code, case_id)
     split = family = None
-    if pack_version == 2:
+    if pack_version >= 2:
         split = entry.get("split")
         if split not in ("dev", "eval"):
             raise FixtureValidationError("INVALID_SPLIT", case_id)
@@ -293,11 +306,14 @@ def _read_case(root: Path, entry: dict, pack_version: int) -> FixtureCase:
     frame_count, remainder = divmod(len(audio), FRAME_BYTES)
     if remainder:
         raise FixtureValidationError("INVALID_AUDIO_LENGTH", f"{case_id}/audio.ulaw")
-    events = _read_events(event_data, frame_count, f"{case_id}/events.jsonl")
+    events = _read_events(
+        event_data, frame_count, f"{case_id}/events.jsonl",
+        allow_transcript=pack_version >= SIGNAL_PACK_VERSION,
+    )
     expected = _read_expected(expected_data, f"{case_id}/expected.json")
     return FixtureCase(
         case_id, entry["track"], entry["source_group"], entry["provenance"], entry["license"],
-        ObservableInput(audio, events), expected, _read_policy_events(entry), split, family,
+        ObservableInput(audio, events), expected, _read_policy_events(entry), split, family, pack_version,
     )
 
 

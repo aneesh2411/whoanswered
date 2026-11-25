@@ -24,7 +24,7 @@ def main() -> None:
     replay_parser.add_argument("--out", required=True, type=Path, help="Output directory")
     replay_parser.add_argument("--detector", default="v1", help="Detector name (default: v1)")
     compare_parser = commands.add_parser("compare", help="Compare bundled detectors on reserved evaluation cases")
-    compare_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 fixture directory")
+    compare_parser.add_argument("--pack", required=True, type=Path, help="Revision 2 or 3 evaluation fixture directory")
     compare_parser.add_argument(
         "--policy-pack", type=Path, help="Fixture directory for the separate scripted policy checks",
     )
