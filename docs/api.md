@@ -43,7 +43,7 @@ print(result.label)
 | `V1Detector()` | Uses the frozen v1 audio baseline. It commits to `human` or `voicemail` when its greeting rules match and otherwise remains `uncertain`. |
 | `TranscriptCueDetector()` | Looks for phrase cues in finalized transcript updates. |
 | `ToneDetector()` | Looks for a steady beep after speech in 160-byte G.711 mu-law frames. |
-| `FusionDetector(audio=None, transcript=None, tone=None)` | Defaults to v1 audio and the bundled transcript and tone detectors. Send `cutoff` after all inputs available at the decision deadline. |
+| `FusionDetector(audio=None, transcript=None, tone=None, *, late_deadline=False)` | Defaults to v1 audio and the bundled transcript and tone detectors. Send `cutoff` after all inputs available at the decision deadline. With `late_deadline=True`, an abstention stays open until a commitment, a later `late_cutoff` event, or `call_completed`. |
 | `evaluate(detector, pack_path)` | Starts a session for each case and returns the benchmark scorecard as a dictionary. |
 | `replay_pack(detector, pack_path, out)` | Returns the same scorecard and writes the canonical scorecard, traces, and per-case files to `out`. |
 
@@ -68,7 +68,8 @@ the frozen replay across delayed or reordered frames.
 V3 replay calls `feed_transcript` when a session provides it. Send that method
 the transcript's arrival time and set `final=True` for a finalized update.
 The v3 benchmark transcripts and audio are authored synthetic signals. Real
-ASR output and real phone audio are untested.
+ASR output and real phone audio are untested in the published benchmark; one
+exploratory real call is noted in the signal rules.
 [Signal rules](v3-signals.md)
 
 ## Loading a detector plugin

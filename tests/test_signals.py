@@ -135,6 +135,71 @@ class FusionTest(unittest.TestCase):
         self.assertEqual(screener.decision().label, "screener")
 
 
+class LateDeadlineTest(unittest.TestCase):
+    def test_default_closes_at_cutoff_and_late_mode_stays_open(self):
+        speech = [SPEECH] * 6 + [SILENT_FRAME] * 24
+        default, late = FusionDetector().start(), FusionDetector(late_deadline=True).start()
+        for session in (default, late):
+            feed(session, speech)
+            self.assertEqual(session.feed_event("cutoff", t_ms=2000).reason, "insufficient_evidence")
+        feed(default, beep((960,), 200) + [SILENT_FRAME], start_ms=7000)
+        self.assertEqual(default.decision().label, "uncertain")
+        feed(late, beep((960,), 200) + [SILENT_FRAME], start_ms=7000)
+        self.assertEqual(late.decision().label, "voicemail")
+        self.assertEqual(late.decision().reason, "beep_after_speech")
+        self.assertIsNone(late.feed_event("late_cutoff", t_ms=8000))
+        self.assertEqual(late.decision().label, "voicemail")
+
+    def test_late_cutoff_closes_an_abstention_and_ignores_early_use(self):
+        early, quiet = FusionDetector(late_deadline=True).start(), FusionDetector(late_deadline=True).start()
+        self.assertIsNone(early.feed_event("late_cutoff", t_ms=1000))
+        feed(early, [SPEECH] * 6 + [SILENT_FRAME] * 24)
+        self.assertEqual(early.feed_event("cutoff", t_ms=2000).label, "uncertain")
+        feed(early, beep((960,), 200) + [SILENT_FRAME], start_ms=7000)
+        self.assertEqual(early.decision().label, "voicemail")
+        self.assertEqual(quiet.feed_event("cutoff", t_ms=2000).label, "uncertain")
+        self.assertEqual(quiet.feed_event("late_cutoff", t_ms=8000).label, "uncertain")
+        self.assertIsNone(quiet.feed_transcript("Record your name.", t_ms=8010, final=True))
+        self.assertFalse(quiet.decision().committed)
+
+    def test_late_window_rules(self):
+        human, backdated, completed = (FusionDetector(late_deadline=True).start() for _ in range(3))
+        for session in (human, backdated, completed):
+            feed(session, [SPEECH] * 6 + [SILENT_FRAME] * 24)
+            session.feed_event("cutoff", t_ms=2000)
+        human.feed_transcript("Hi, who is calling?", t_ms=3000, final=True)
+        self.assertIsNone(human.feed_event("cutoff", t_ms=3100))
+        self.assertFalse(human.decision().committed)
+        self.assertEqual(human.feed_event("late_cutoff", t_ms=8000).label, "human")
+        self.assertIsNone(backdated.feed_event("late_cutoff", t_ms=1500))
+        backdated.feed_transcript("Hi, who is calling?", t_ms=5000, final=True)
+        self.assertIsNone(backdated.feed_event("late_cutoff", t_ms=4000))
+        self.assertFalse(backdated.decision().committed)
+        self.assertEqual(backdated.decision().at_ms, 2000)
+        self.assertEqual(completed.feed_event("call_completed", t_ms=4000).reason, "confirmed_disconnect")
+        self.assertIsNone(completed.feed_event("late_cutoff", t_ms=8000))
+
+    def test_default_mode_forwards_late_cutoff_like_any_event(self):
+        seen = []
+
+        class Recorder(V1Detector):
+            def start(self):
+                session = super().start()
+                original = session.feed_event
+                session.feed_event = lambda name, *, t_ms: (seen.append(name), original(name, t_ms=t_ms))[1]
+                return session
+
+        FusionDetector(Recorder()).start().feed_event("late_cutoff", t_ms=100)
+        self.assertEqual(seen, ["late_cutoff"])
+
+    def test_late_mode_does_not_change_an_early_commit(self):
+        mailbox = FusionDetector(late_deadline=True).start()
+        mailbox.feed_transcript("Leave a message.", t_ms=10, final=True)
+        feed(mailbox, [SPEECH] * 50)
+        self.assertEqual(mailbox.decision().label, "voicemail")
+        self.assertEqual(mailbox.feed_event("cutoff", t_ms=2000), None)
+
+
 class SignalPackTest(unittest.TestCase):
     def test_event_payload_validation(self):
         answer = {"event": "call_answered", "arrival_ms": 0, "sequence": 1}

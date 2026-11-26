@@ -198,24 +198,37 @@ class FusionDetector:
         audio: Detector | None = None,
         transcript: Detector | None = None,
         tone: Detector | None = None,
+        *,
+        late_deadline: bool = False,
     ) -> None:
+        self._late_deadline = late_deadline
         self._audio = V1Detector() if audio is None else audio
         self._transcript = TranscriptCueDetector() if transcript is None else transcript
         self._tone = ToneDetector() if tone is None else tone
 
     def start(self) -> DetectorSession:
-        return _FusionSession(self._audio.start(), self._transcript.start(), self._tone.start())
+        return _FusionSession(
+            self._audio.start(), self._transcript.start(), self._tone.start(), self._late_deadline,
+        )
 
 
 class _FusionSession(_SignalSession):
-    def __init__(self, audio: DetectorSession, transcript: DetectorSession, tone: DetectorSession) -> None:
+    def __init__(
+        self, audio: DetectorSession, transcript: DetectorSession, tone: DetectorSession,
+        late_deadline: bool = False,
+    ) -> None:
         super().__init__()
         self._components = (audio, transcript, tone)
+        self._late_deadline = late_deadline
+        self._awaiting_late = False
+        self._cutoff_ms = 0
+        self._seen_ms = 0
 
     def feed_audio(
         self, frame: bytes, *, t_ms: int, encoding: str = "mulaw8k",
     ) -> Decision | None:
         if not self._closed:
+            self._seen_ms = max(self._seen_ms, t_ms)
             for component in self._components:
                 component.feed_audio(frame, t_ms=t_ms, encoding=encoding)
             return self._fuse(t_ms)
@@ -223,6 +236,7 @@ class _FusionSession(_SignalSession):
 
     def _feed_audio_at(self, frame: bytes, *, t_ms: int, sample_start_ms: int) -> Decision | None:
         if not self._closed:
+            self._seen_ms = max(self._seen_ms, t_ms)
             for component in self._components:
                 feed_at = getattr(component, "_feed_audio_at", None)
                 if feed_at is None:
@@ -234,6 +248,7 @@ class _FusionSession(_SignalSession):
 
     def feed_transcript(self, text: str, *, t_ms: int, final: bool) -> Decision | None:
         if not self._closed:
+            self._seen_ms = max(self._seen_ms, t_ms)
             for component in self._components:
                 feed = getattr(component, "feed_transcript", None)
                 if feed is not None:
@@ -244,6 +259,13 @@ class _FusionSession(_SignalSession):
     def feed_event(self, name: str, *, t_ms: int) -> Decision | None:
         if self._closed:
             return None
+        if self._late_deadline:
+            if name == "late_cutoff":
+                if not self._awaiting_late or t_ms <= max(self._cutoff_ms, self._seen_ms - 1):
+                    return None
+                return self._fuse(t_ms, cutoff=True, late=True)
+            if name == "cutoff" and self._awaiting_late:
+                return None
         for component in self._components:
             component.feed_event(name, t_ms=t_ms)
         if name == "call_completed":
@@ -252,7 +274,7 @@ class _FusionSession(_SignalSession):
             return self._decision
         return self._fuse(t_ms, cutoff=name == "cutoff")
 
-    def _fuse(self, t_ms: int, *, cutoff: bool = False) -> Decision | None:
+    def _fuse(self, t_ms: int, *, cutoff: bool = False, late: bool = False) -> Decision | None:
         audio, transcript, tone = (component.decision().label for component in self._components)
         if tone == "voicemail" and transcript != "screener":
             self._decision = Decision("voicemail", t_ms, True, "beep_after_speech")
@@ -267,6 +289,12 @@ class _FusionSession(_SignalSession):
                 conflict = len({audio, transcript, tone} - {"uncertain"}) > 1
                 reason = "conflicting_signals" if conflict else "insufficient_evidence"
                 self._decision = Decision("uncertain", t_ms, False, reason)
+                if self._late_deadline and not late:
+                    # Stay open after an abstention at cutoff: a later beep or agreeing
+                    # phrase can still commit, and ``late_cutoff`` closes the session.
+                    self._awaiting_late = True
+                    self._cutoff_ms = t_ms
+                    return self._decision
         else:
             return None
         self._closed = True

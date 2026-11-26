@@ -319,7 +319,7 @@
       "version": {
         "_detector.py": "5d3435ab100f5a98eb87759d482ea3085b176f7d8d68dcfb6a1ac390cafb5a8d",
         "baseline.py": "173e7de5933b4524b0b9d29294b0459e2d7ba887e2956c92eeba3d096eef34b0",
-        "signals.py": "1d253ef2d8c4e3e1c794d01b9dd02814840bf871f88ec6421abcca7a468a2d7d",
+        "signals.py": "b2aa2a4351154d3085d83888bea021633aed978cc4cc71149de3de23fd0454c2",
         "transcript_cues.json": "e0d720b60bed6f4dd41402dc3e7f5517813c3fcc47e713a10d183611d49d35fd"
       }
     },
@@ -337,7 +337,7 @@
       "version": {
         "_detector.py": "5d3435ab100f5a98eb87759d482ea3085b176f7d8d68dcfb6a1ac390cafb5a8d",
         "baseline.py": "173e7de5933b4524b0b9d29294b0459e2d7ba887e2956c92eeba3d096eef34b0",
-        "signals.py": "1d253ef2d8c4e3e1c794d01b9dd02814840bf871f88ec6421abcca7a468a2d7d"
+        "signals.py": "b2aa2a4351154d3085d83888bea021633aed978cc4cc71149de3de23fd0454c2"
       }
     },
     "transcript": {
@@ -347,7 +347,7 @@
       },
       "version": {
         "_detector.py": "5d3435ab100f5a98eb87759d482ea3085b176f7d8d68dcfb6a1ac390cafb5a8d",
-        "signals.py": "1d253ef2d8c4e3e1c794d01b9dd02814840bf871f88ec6421abcca7a468a2d7d",
+        "signals.py": "b2aa2a4351154d3085d83888bea021633aed978cc4cc71149de3de23fd0454c2",
         "transcript_cues.json": "e0d720b60bed6f4dd41402dc3e7f5517813c3fcc47e713a10d183611d49d35fd"
       }
     },
