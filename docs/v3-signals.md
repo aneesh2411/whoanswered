@@ -1,7 +1,8 @@
 # v3 transcript and tone signals
 
 The v3 transcripts and audio are authored synthetic signals. Real ASR output
-and real phone audio are untested. The detectors run entirely in the Python
+and real phone audio are untested in the published results. One exploratory
+real call is described under the optional late deadline. The detectors run entirely in the Python
 standard library without network access.
 
 ## Transcript cues
@@ -45,6 +46,22 @@ these three components as `audio`, `transcript`, and `tone` detectors.
   `uncertain` at cutoff.
 - The first commitment is final. A confirmed disconnect closes an
   uncommitted session. Cutoff closes a fusion session even if it abstains.
+
+## Optional late deadline
+
+`FusionDetector(late_deadline=True)` keeps a session open after it abstains at
+`cutoff`. A completed beep after speech, a decisive screener phrase, or a
+mailbox phrase that agrees with v1 can then still commit. Send `late_cutoff`
+at your later deadline, after the cutoff, to apply the cutoff rule once more
+and close the session. A repeated `cutoff` is ignored while it waits, and
+`call_completed` also closes it. A committed decision never changes, and the default (`False`) keeps
+the behavior described above, including the frozen reserved comparison.
+
+One exploratory real call to a phone with a custom voicemail greeting (a
+single sample, speech-to-text from a local model) had a greeting of about
+4.5 s and a beep near 7 s. The 2,000 ms cutoff abstained, and the tone rule
+alone committed voicemail at 7.1 s. Greetings that end after the cutoff may
+need this option. All published results still use authored synthetic inputs.
 
 ## Development and reserved evaluation
 
